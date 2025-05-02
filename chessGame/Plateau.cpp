@@ -26,7 +26,7 @@ void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
 {
 	if (!isOccupied(newRow, newColumn))
 	{
-		if(_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn))
+		if(_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn)) 
 		{
 			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
 			_grid[currentRow][currentColumn] = nullptr;

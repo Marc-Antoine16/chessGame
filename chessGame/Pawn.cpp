@@ -4,7 +4,6 @@ Pawn::Pawn(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
 {
 	if (isWhite)
 		_deplacement.push_back(_currentRow - 1);
-
 	else
 		_deplacement.push_back(_currentRow + 1);
 
@@ -14,7 +13,7 @@ Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) 
 {
 	if (isWhite)
 	{
-		_deplacement.push_back(currentRow - 1);
+		_deplacement.push_back(currentRow - 1); 
 		_deplacement.push_back(currentRow - 2);
 	}
 	else
@@ -28,7 +27,7 @@ bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 {
 	if(currentColumn == newColumn)
 	{
-		if (_isWhite == true)
+		if (_isWhite)
 		{
 			if (currentRow == 6)
 			{
