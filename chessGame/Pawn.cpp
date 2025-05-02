@@ -26,55 +26,19 @@ Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) 
 
 bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn) const
 {
-	if(currentColumn == newColumn)
+	if (currentColumn != newColumn)
+		return false;
+
+	int direction = _isWhite ? -1 : 1;
+	int startRow = _isWhite ? 6 : 1;
+	if (currentRow == startRow && newRow == currentRow + 2 * direction)
 	{
-		if (_isWhite == true)
-		{
-			if (currentRow == 6)
-			{
-				if (newRow == currentRow - 2 || newRow == currentRow - 1)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			if (newRow == currentRow - 1)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			if (currentRow == 1)
-			{
-				if (newRow == currentRow + 2 || newRow == currentRow + 1)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			if (newRow == currentRow + 1)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+		return true;
+	}
+	else if (newRow == currentRow + direction)
+	{
+		return true;
 	}
 	else
-	{
 		return false;
-	}
 }
