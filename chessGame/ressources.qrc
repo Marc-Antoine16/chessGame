@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/chessGame">
+        <file>pawn_white.png</file>
+        <file>pawn_black.png</file>
+        <file>white_rook.png</file>
+        <file>black_rook.png</file>
+        <file>white_bishop.png</file>
+        <file>black_bishop.png</file>
+    </qresource>
+</RCC>
