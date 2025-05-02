@@ -1,8 +1,4 @@
 <RCC>
-    <qresource prefix="/chessGame">
-        <file>black_bishop.png</file>
-        <file>black_rook.png</file>
-        <file>pawn_black.png</file>
-        <file>pawn_white.png</file>
+    <qresource prefix="chessGame">
     </qresource>
 </RCC>
