@@ -16,9 +16,12 @@ private:
 	std::vector<std::vector<QPushButton*>> _button;
 	QLabel* _labels[8][8];
 	Plateau _plateau;
+
 public:
 	Echiquier(Plateau &plateau);
 	~Echiquier();
 	void onButtonClicked(int row, int column);
 	void updateBoard();
+
+	
 };
