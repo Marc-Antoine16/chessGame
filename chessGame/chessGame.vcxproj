@@ -95,6 +95,7 @@
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Plateau.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <QtRcc Include="chessGame.qrc" />
     <QtRcc Include="ressources.qrc" />
     <QtUic Include="chessGame.ui" />
@@ -104,6 +105,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Rook.h" />
     <QtMoc Include="Echiquier.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
