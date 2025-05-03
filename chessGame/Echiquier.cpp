@@ -70,7 +70,7 @@ void Echiquier::onButtonClicked(int row, int column)
 }
 
 void Echiquier::updateBoard() {
-	int iconSize = 75;
+	int iconSize = 80;
 
 	for (int row = 0; row < 8; ++row) {
 		for (int column = 0; column < 8; ++column) {
@@ -80,7 +80,8 @@ void Echiquier::updateBoard() {
 				_button[row][column]->setIcon(QIcon(piece->getImagePath()));
 				_button[row][column]->setIconSize(QSize(iconSize, iconSize));
 			}
-			else {
+			else
+			{
 				_button[row][column]->setIcon(QIcon());
 			}
 		}
