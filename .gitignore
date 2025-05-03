@@ -435,6 +435,36 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++
+# Fichiers de configuration Qt Creator
 *.pro.user
 *.pro.user.*
-CMakeCache.txt
+
+# Fichiers générés par Qt (compilation, UI, et ressources)
+moc_*
+ui_*
+qrc_*
+*.moc
+*.qrc
+*.qmlc
+*.qmltypes
+
+# Bibliothèques et exécutables Qt
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.o
+*.obj
+
+# Ignorer les bibliothèques Qt locales téléchargées
+Qt/
+qt/
+vcpkg_installed/
+conan/
+
+# Cache et fichiers temporaires Qt
+*.cache
+*.qmake.stash
+
