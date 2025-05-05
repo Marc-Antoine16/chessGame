@@ -1,5 +1,6 @@
 #include "Piece.h"
 #include <iostream>
+#include "Plateau.h"
 
 Piece::Piece(bool isWhite, QString& imagePath)
 {
