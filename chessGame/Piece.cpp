@@ -1,5 +1,6 @@
 #include "Piece.h"
 #include <iostream>
+#include "Plateau.h"
 
 Piece::Piece(bool isWhite, QString& imagePath)
 {
@@ -35,7 +36,7 @@ void Piece::setImage(const QString& imagePath)
     _imagePath = imagePath;
 }
 
-QString Piece::getImagePath()
+QString Piece::getImagePath() const
 {
     return _imagePath;
 }

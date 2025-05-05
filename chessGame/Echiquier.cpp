@@ -6,6 +6,7 @@ using namespace std;
 
 Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 {
+	_tour = 1;
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -53,34 +54,35 @@ void Echiquier::onButtonClicked(int row, int column)
 	if(sourceRow == -1 && sourceColumn == -1)
 	{
 		Piece* piece = _plateau.getPiece(row, column);
-
-		if (piece != nullptr)
-		{
-			sourceRow = row;
-			sourceColumn = column;
-		}
+	
+			if (piece != nullptr)
+			{
+				sourceRow = row;
+				sourceColumn = column;
+			}
 	}
 	else
 	{
-		_plateau.move(sourceRow, sourceColumn, row, column);
-		updateBoard();
-		sourceRow = -1;
-		sourceColumn = -1;
+			_plateau.move(sourceRow, sourceColumn, row, column);
+			updateBoard();
+			sourceRow = -1;
+			sourceColumn = -1;
 	}
 }
 
 void Echiquier::updateBoard() {
-	int iconSize = 75;
+	int iconSize = 80;
 
 	for (int row = 0; row < 8; ++row) {
 		for (int column = 0; column < 8; ++column) {
 			Piece* piece = _plateau.getPiece(row, column);
 
-			if (piece) {
+			if (piece != nullptr) {
 				_button[row][column]->setIcon(QIcon(piece->getImagePath()));
 				_button[row][column]->setIconSize(QSize(iconSize, iconSize));
 			}
-			else {
+			else
+			{
 				_button[row][column]->setIcon(QIcon());
 			}
 		}

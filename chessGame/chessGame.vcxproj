@@ -92,21 +92,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Echiquier.cpp" />
-    <ClCompile Include="Pawn.cpp" />
-    <ClCompile Include="Piece.cpp" />
-    <ClCompile Include="Plateau.cpp" />
-    <QtRcc Include="chessGame.qrc" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Bishop.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\chessGame.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Echiquier.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <QtUic Include="chessGame.ui" />
-    <QtMoc Include="chessGame.h" />
-    <ClCompile Include="chessGame.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Knight.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\main.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Pawn.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Piece.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Plateau.cpp" />
+    <ClCompile Include="..\..\..\Users\patri\Downloads\Rook.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Echiquier.h" />
-    <ClInclude Include="Pawn.h" />
-    <ClInclude Include="Piece.h" />
-    <ClInclude Include="Plateau.h" />
+    <QtMoc Include="..\..\..\Users\patri\Downloads\Echiquier.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\..\Users\patri\Downloads\chessGame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Bishop.h" />
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Knight.h" />
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Pawn.h" />
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Piece.h" />
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Plateau.h" />
+    <ClInclude Include="..\..\..\Users\patri\Downloads\Rook.h" />
+    <ClInclude Include="GameManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\..\..\Users\patri\Downloads\chessGame.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

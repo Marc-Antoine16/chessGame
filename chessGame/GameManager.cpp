@@ -1,0 +1,65 @@
+#include "GameManager.h"
+
+GameManager::GameManager() {
+
+	QString path = ":/chessGame/pawn_white.png";
+	QString blackPath = ":/chessGame/pawn_black.png";
+	QString WrookPath = ":/chessGame/white_rook.png";
+	QString BrookPath = ":/chessGame/black_rook.png";
+	QString blackBishopPath = ":/chessGame/black_bishop.png";
+	QString whiteBishopPath = ":/chessGame/white_bishop.png";
+	QString blackKnightPath = ":/chessGame/112-1127048_chess-knight-png-knight-chess-pieces-png-transparent.png";
+	QString whiteKnightPath = ":/chessGame/455-4559527_knight-clipart-chess-piece-lichess-logo.png";
+
+	for (int i = 0; i < 8; i++)
+	{
+		Pawn* pawn = new Pawn(true, path);
+		_piecesCapturees.push_back(pawn);
+		_plateau.placer(pawn, 6, i);
+		Pawn* blackPawn = new Pawn(false, blackPath);
+		_piecesCapturees.push_back(blackPawn);
+		_plateau.placer(blackPawn, 1, i);
+	}
+
+	Rook* rook = new Rook(true, WrookPath);
+	_piecesCapturees.push_back(rook);
+	_plateau.placer(rook, 7, 0);
+	_plateau.placer(rook, 7, 7);
+	Rook* blackRook = new Rook(false, BrookPath);
+	_piecesCapturees.push_back(blackRook);
+	_plateau.placer(blackRook, 0, 7);
+	_plateau.placer(blackRook, 0, 0);
+
+	Bishop* bishop = new Bishop(true, whiteBishopPath);
+	_piecesCapturees.push_back(bishop);
+	_plateau.placer(bishop, 7, 2);
+	_plateau.placer(bishop, 7, 5);
+	Bishop* blackBishop = new Bishop(false, blackBishopPath);
+	_piecesCapturees.push_back(blackBishop);
+	_plateau.placer(blackBishop, 0, 5);
+	_plateau.placer(blackBishop, 0, 2);
+
+	Knight* Wknight = new Knight(true, whiteKnightPath);
+	_piecesCapturees.push_back(Wknight);
+	_plateau.placer(Wknight, 7, 1);
+	_plateau.placer(Wknight, 7, 6);
+	Knight* bKnight = new Knight(false, blackKnightPath);
+	_piecesCapturees.push_back(bKnight);
+	_plateau.placer(bKnight, 0, 6);
+	_plateau.placer(bKnight, 0, 1);
+
+}
+
+void GameManager::startGame() {
+	_echiquier = new Echiquier(_plateau);
+	_echiquier->updateBoard();
+	_echiquier->setWindowTitle("jeu d'echec");
+	_echiquier->show();
+}
+
+GameManager::~GameManager() {
+	for (auto it : _piecesCapturees) {
+		delete it;
+	}
+	delete _echiquier;
+}
