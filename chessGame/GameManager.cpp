@@ -8,7 +8,7 @@ GameManager::GameManager() {
 	QString BrookPath = ":/chessGame/black_rook.png";
 	QString blackBishopPath = ":/chessGame/black_bishop.png";
 	QString whiteBishopPath = ":/chessGame/white_bishop.png";
-	QString blackKnightPath = ":/chessGame/112-1127048_chess-knight-png-knight-chess-pieces-png-transparent.png";
+	QString blackKnightPath = ":/chessGame/black_knight.png";
 	QString whiteKnightPath = ":/chessGame/455-4559527_knight-clipart-chess-piece-lichess-logo.png";
 
 	for (int i = 0; i < 8; i++)
@@ -52,7 +52,13 @@ GameManager::GameManager() {
 
 void GameManager::startGame() {
 	_echiquier = new Echiquier(_plateau);
-	_echiquier->updateBoard();
+	for(int i = 0; i < 8; i++)
+	{
+		for(int j = 0; j < 8; j++)
+		{
+			_echiquier->updateBoard(i, j);
+		}
+	}
 	_echiquier->setWindowTitle("jeu d'echec");
 	_echiquier->show();
 }
