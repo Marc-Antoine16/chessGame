@@ -468,3 +468,6 @@ conan/
 *.cache
 *.qmake.stash
 
+*.sln
+*.vcxproj
+*.vcxproj.*
