@@ -64,28 +64,23 @@ void Echiquier::onButtonClicked(int row, int column)
 	else
 	{
 		_plateau.move(sourceRow, sourceColumn, row, column);
-		updateBoard();
+		updateBoard(sourceRow, sourceColumn);
+		updateBoard(row, column);
 		sourceRow = -1;
 		sourceColumn = -1;
 	}
 }
 
-void Echiquier::updateBoard() {
+void Echiquier::updateBoard(int row, int column) {
 	int iconSize = 80;
+	Piece* piece = _plateau.getPiece(row, column);
 
-	for (int row = 0; row < 8; ++row) {
-		for (int column = 0; column < 8; ++column) {
-			Piece* piece = _plateau.getPiece(row, column);
-
-			if (piece != nullptr) {
-				_button[row][column]->setIcon(QIcon(piece->getImagePath()));
-				_button[row][column]->setIconSize(QSize(iconSize, iconSize));
-			}
-			else
-			{
-				_button[row][column]->setIcon(QIcon());
-			}
-		}
+	if (piece) {
+		_button[row][column]->setIcon(QIcon(piece->getImagePath()));
+		_button[row][column]->setIconSize(QSize(iconSize, iconSize));
+	}
+	else {
+		_button[row][column]->setIcon(QIcon());
 	}
 }
 
