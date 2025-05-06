@@ -22,7 +22,7 @@ public:
 	Echiquier(Plateau &plateau);
 	~Echiquier();
 	void onButtonClicked(int row, int column);
-	void updateBoard();
+	void updateBoard(int row, int column);
 
 	
 };

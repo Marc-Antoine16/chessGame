@@ -4,5 +4,8 @@
         <file>black_rook.png</file>
         <file>pawn_black.png</file>
         <file>pawn_white.png</file>
+        <file>white_bishop.png</file>
+        <file>white_rook.png</file>
+        <file>black_knight.png</file>
     </qresource>
 </RCC>
