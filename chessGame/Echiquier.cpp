@@ -56,16 +56,17 @@ void Echiquier::onButtonClicked(int row, int column)
 	{
 		Piece* piece = _plateau.getPiece(row, column);
 
-		if (piece != nullptr && piece->isWhite() == (_tourBlanc % 2 == 1 ? true : false))
+		if (piece != nullptr && piece->isWhite() == _tourBlanc)
 		{
 			sourceRow = row;
 			sourceColumn = column;
-			_tourBlanc = !_tourBlanc;
 		}
 	}
 	else
 	{
-		_plateau.move(sourceRow, sourceColumn, row, column);
+		if(_plateau.moveValid(sourceRow, sourceColumn, row, column))
+			_tourBlanc = !_tourBlanc;
+
 		updateBoard(sourceRow, sourceColumn);
 		updateBoard(row, column);
 		sourceRow = -1;

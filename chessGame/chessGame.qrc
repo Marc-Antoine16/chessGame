@@ -7,5 +7,6 @@
         <file>white_bishop.png</file>
         <file>white_rook.png</file>
         <file>black_knight.png</file>
+        <file>white_knight.png</file>
     </qresource>
 </RCC>
