@@ -6,6 +6,7 @@ using namespace std;
 
 Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 {
+	_tour = 1;
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -19,10 +20,10 @@ Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 			QPushButton* bouton = new QPushButton(this);
 			bouton->setFixedSize(squareSize, squareSize);
 
-			connect(bouton, &QPushButton::clicked, this, [=]() 
-			{
-				onButtonClicked(i, j);
-			});
+			connect(bouton, &QPushButton::clicked, this, [=]()
+				{
+					onButtonClicked(i, j);
+				});
 
 			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
 
@@ -49,8 +50,8 @@ Echiquier::~Echiquier()
 void Echiquier::onButtonClicked(int row, int column)
 {
 	static int sourceRow = -1, sourceColumn = -1;
-	
-	if(sourceRow == -1 && sourceColumn == -1)
+
+	if (sourceRow == -1 && sourceColumn == -1)
 	{
 		Piece* piece = _plateau.getPiece(row, column);
 
@@ -76,7 +77,7 @@ void Echiquier::updateBoard() {
 		for (int column = 0; column < 8; ++column) {
 			Piece* piece = _plateau.getPiece(row, column);
 
-			if (piece) {
+			if (piece != nullptr) {
 				_button[row][column]->setIcon(QIcon(piece->getImagePath()));
 				_button[row][column]->setIconSize(QSize(iconSize, iconSize));
 			}

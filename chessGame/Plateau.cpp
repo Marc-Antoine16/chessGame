@@ -31,11 +31,13 @@ void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
 	Piece* source = _grid[currentRow][currentColumn];
 	Piece* target = _grid[newRow][newColumn];
 
-	if (target != nullptr && source!=nullptr)
+	if (target != nullptr && source != nullptr)
 	{
 		if (source->isWhite() != target->isWhite())
 		{
 			isCaptured = true;
+			//delete target; // Capture la pièce adverse
+			target = nullptr;
 		}
 
 	}
@@ -50,7 +52,7 @@ void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
 	}
 	else if (!isOccupied(newRow, newColumn))
 	{
-		if(_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this)) 
+		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
 		{
 			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
 			_grid[currentRow][currentColumn] = nullptr;
@@ -61,6 +63,7 @@ void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
 
 bool Plateau::isOccupied(int row, int column) const
 {
+
 	if (_grid[row][column] != nullptr)
 	{
 		return true;

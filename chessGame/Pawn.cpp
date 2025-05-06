@@ -14,7 +14,7 @@ Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) 
 {
 	if (isWhite)
 	{
-		_deplacement.push_back(currentRow - 1); 
+		_deplacement.push_back(currentRow - 1);
 		_deplacement.push_back(currentRow - 2);
 	}
 	else
@@ -38,10 +38,10 @@ bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 
 		return true;
 	}
-	if (isCaptured && newColumn != currentColumn && newRow == abs(currentRow + direction) && currentColumn!= currentColumn+direction)
+	if (isCaptured && newColumn != currentColumn && newRow == abs(currentRow + direction) && currentColumn != currentColumn + direction)
 	{
 		return true;
 	}
-	
+
 	return false;
 }

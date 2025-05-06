@@ -1,16 +1,14 @@
 #pragma once
 #include "Piece.h"
 #include <vector>
-#include "Plateau.h"
 
-class Pawn : public Piece
+class Knight : public Piece
 {
 private:
 	std::vector<int> _deplacement;
 
 public:
-	Pawn(bool isWhite, QString& imagePath);
-	Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath);
+	Knight(bool isWhite, QString& imagePath);
+	Knight(int currentRow, int currentColumn, bool isWhite, QString& imagePath);
 	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const;
 };
-

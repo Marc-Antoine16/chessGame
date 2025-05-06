@@ -36,7 +36,7 @@ void Piece::setImage(const QString& imagePath)
     _imagePath = imagePath;
 }
 
-QString Piece::getImagePath()
+QString Piece::getImagePath() const
 {
     return _imagePath;
 }

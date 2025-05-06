@@ -24,16 +24,16 @@ Rook::Rook(int currentRow, int currentColumn, bool isWhite, QString& imagePath) 
 	setImage(_imagePath);
 }
 
-bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau *plateau) const
+bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const
 {
-    if (currentRow == newRow)
-    {
-        int step = (newColumn > currentColumn) ? 1 : -1;
-        for (int col = currentColumn + step; col != newColumn; col += step)
-        {
-            if (plateau->getPiece(currentRow, col) != nullptr)
-                return false; // Il y a un obstacle
-        }
+	if (currentRow == newRow)
+	{
+		int step = (newColumn > currentColumn) ? 1 : -1;
+		for (int col = currentColumn + step; col != newColumn; col += step)
+		{
+			if (plateau->getPiece(currentRow, col) != nullptr)
+				return false; // Il y a un obstacle
+		}
 	}
 	else if (currentColumn == newColumn)
 	{
@@ -43,13 +43,13 @@ bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 			if (plateau->getPiece(row, currentColumn) != nullptr)
 			{
 				return false; // Il y a un obstacle
-			}	
+			}
 		}
 	}
-    else
-    {
-        return false; // Ni horizontal ni vertical
-    }
+	else
+	{
+		return false; // Ni horizontal ni vertical
+	}
 
 	Piece* dest = plateau->getPiece(newRow, newColumn);
 
@@ -57,7 +57,7 @@ bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 	{
 		return true;
 	}
-		
+
 
 	return false;
 }

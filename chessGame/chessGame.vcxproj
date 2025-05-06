@@ -92,7 +92,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Echiquier.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Plateau.cpp" />
@@ -104,6 +107,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Rook.h" />
     <QtMoc Include="Echiquier.h" />
     <ClInclude Include="Pawn.h" />
