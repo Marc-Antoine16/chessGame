@@ -4,5 +4,9 @@
         <file>black_rook.png</file>
         <file>pawn_black.png</file>
         <file>pawn_white.png</file>
+        <file>white_bishop.png</file>
+        <file>white_rook.png</file>
+        <file>112-1127048_chess-knight-png-knight-chess-pieces-png-transparent.png</file>
+        <file>455-4559527_knight-clipart-chess-piece-lichess-logo.png</file>
     </qresource>
 </RCC>
