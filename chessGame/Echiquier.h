@@ -16,7 +16,7 @@ private:
 	std::vector<std::vector<QPushButton*>> _button;
 	QLabel* _labels[8][8];
 	Plateau _plateau;
-	int _tour;
+	int _tourBlanc;
 
 public:
 	Echiquier(Plateau &plateau);
