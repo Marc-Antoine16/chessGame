@@ -1,7 +1,7 @@
 #include "GameManager.h"
 
-GameManager::GameManager() {
-
+GameManager::GameManager() 
+{
 	QString path = ":/chessGame/pawn_white.png";
 	QString blackPath = ":/chessGame/pawn_black.png";
 	QString WrookPath = ":/chessGame/white_rook.png";
@@ -9,7 +9,8 @@ GameManager::GameManager() {
 	QString blackBishopPath = ":/chessGame/black_bishop.png";
 	QString whiteBishopPath = ":/chessGame/white_bishop.png";
 	QString blackKnightPath = ":/chessGame/black_knight.png";
-	QString whiteKnightPath = ":/chessGame/455-4559527_knight-clipart-chess-piece-lichess-logo.png";
+	QString whiteKnightPath = ":/chessGame/white_knight.png";
+	QString WkingPath = ":/chessGame/PierLucLeGoat.png";
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -48,6 +49,9 @@ GameManager::GameManager() {
 	_plateau.placer(bKnight, 0, 6);
 	_plateau.placer(bKnight, 0, 1);
 
+	King* WKing = new King(true, WkingPath);
+	_piecesCapturees.push_back(WKing);
+	_plateau.placer(WKing, 7, 4);
 }
 
 void GameManager::startGame() {

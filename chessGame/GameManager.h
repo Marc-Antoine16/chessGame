@@ -5,6 +5,7 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
+#include "King.h"
 #include <list>
 
 
@@ -12,7 +13,6 @@ class GameManager {
 private:
 	Plateau _plateau;
 	Echiquier* _echiquier;
-	bool _tourBlanc;
 	std::list<Piece*> _piecesCapturees;
 public:
 	GameManager();

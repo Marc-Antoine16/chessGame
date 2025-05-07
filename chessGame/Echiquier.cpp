@@ -6,7 +6,7 @@ using namespace std;
 
 Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 {
-	_tour = 1;
+	_tourBlanc = true;
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -49,13 +49,14 @@ Echiquier::~Echiquier()
 
 void Echiquier::onButtonClicked(int row, int column)
 {
+
 	static int sourceRow = -1, sourceColumn = -1;
 
 	if (sourceRow == -1 && sourceColumn == -1)
 	{
 		Piece* piece = _plateau.getPiece(row, column);
 
-		if (piece != nullptr)
+		if (piece != nullptr && piece->isWhite() == _tourBlanc)
 		{
 			sourceRow = row;
 			sourceColumn = column;
@@ -63,7 +64,9 @@ void Echiquier::onButtonClicked(int row, int column)
 	}
 	else
 	{
-		_plateau.move(sourceRow, sourceColumn, row, column);
+		if(_plateau.moveValid(sourceRow, sourceColumn, row, column))
+			_tourBlanc = !_tourBlanc;
+
 		updateBoard(sourceRow, sourceColumn);
 		updateBoard(row, column);
 		sourceRow = -1;

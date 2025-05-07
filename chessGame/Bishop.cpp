@@ -1,22 +1,5 @@
 #include "Bishop.h"
 
-Bishop::Bishop(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
-{
-	_currentRow = 0;
-	_currentColumn = 0;
-	_isWhite = isWhite;
-	_imagePath = imagePath;
-	setImage(_imagePath);
-}
-
-Bishop::Bishop(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath)
-{
-	_currentRow = currentRow;
-	_currentColumn = currentColumn;
-	_isWhite = isWhite;
-	_imagePath = imagePath;
-	setImage(_imagePath);
-}
 
 bool Bishop::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const
 {
