@@ -33,12 +33,11 @@ bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 	{
 		return plateau->getPiece(newRow, newColumn) == nullptr;
 	}
-	if (!_isCaptured && newColumn == currentColumn && currentRow == (_isWhite ? 6 : 1) && newRow == currentRow + (2 * direction))
+	else if (!_isCaptured && newColumn == currentColumn && currentRow == (_isWhite ? 6 : 1) && newRow == currentRow + (2 * direction))
 	{
-
 		return true;
 	}
-	if (isCaptured && newColumn != currentColumn && newRow == abs(currentRow + direction) && currentColumn != currentColumn + direction)
+	else if (isCaptured && newColumn != currentColumn && newRow == abs(currentRow + direction) && currentColumn != currentColumn + direction)
 	{
 		return true;
 	}
