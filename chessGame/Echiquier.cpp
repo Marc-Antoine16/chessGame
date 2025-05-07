@@ -6,10 +6,16 @@ using namespace std;
 
 Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 {
-	_tourBlanc = true;
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
+
+	_tourBlanc = true;
+
+	_tourLabel = new QLabel("Tour des blancs", this);
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: rgb(250, 250, 250);");
+
+	layout->addWidget(_tourLabel, 0, 0, 1, 8, Qt::AlignCenter);
 	int squareSize = 90;
 
 	for (int i = 0; i < 8; i++)
@@ -28,7 +34,7 @@ Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
 
 			bouton->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
-			layout->addWidget(bouton, i, j);
+			layout->addWidget(bouton, i + 1, j);
 			row.push_back(bouton);
 		}
 		_button.push_back(row);
@@ -65,10 +71,13 @@ void Echiquier::onButtonClicked(int row, int column)
 	else
 	{
 		if(_plateau.moveValid(sourceRow, sourceColumn, row, column))
+		{
 			_tourBlanc = !_tourBlanc;
-
-		updateBoard(sourceRow, sourceColumn);
-		updateBoard(row, column);
+			_tourLabel->setText(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+			_tourLabel->repaint();
+			updateBoard(sourceRow, sourceColumn);
+			updateBoard(row, column);
+		}
 		sourceRow = -1;
 		sourceColumn = -1;
 	}
@@ -86,5 +95,3 @@ void Echiquier::updateBoard(int row, int column) {
 		_button[row][column]->setIcon(QIcon());
 	}
 }
-
-

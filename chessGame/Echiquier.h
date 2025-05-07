@@ -17,6 +17,7 @@ private:
 	QLabel* _labels[8][8];
 	Plateau _plateau;
 	bool _tourBlanc;
+	QLabel* _tourLabel;
 
 public:
 	Echiquier(Plateau &plateau);
