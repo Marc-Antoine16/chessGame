@@ -9,5 +9,8 @@
         <file>black_knight.png</file>
         <file>white_knight.png</file>
         <file>PierLucLeGoat.png</file>
+        <file>BKing.png</file>
+        <file>BQueen.png</file>
+        <file>WQueen.png</file>
     </qresource>
 </RCC>

@@ -6,6 +6,7 @@
 #include "Bishop.h"
 #include "Knight.h"
 #include "King.h"
+#include "Queen.h"
 #include <list>
 
 

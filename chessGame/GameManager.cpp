@@ -11,6 +11,9 @@ GameManager::GameManager()
 	QString blackKnightPath = ":/chessGame/black_knight.png";
 	QString whiteKnightPath = ":/chessGame/white_knight.png";
 	QString WkingPath = ":/chessGame/PierLucLeGoat.png";
+	QString BkingPath = ":/chessGame/BKing.png";
+	QString BQueenPath = ":/chessGame/BQueen.png";
+	QString WQueenPath = ":/chessGame/WQueen.png";
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -52,6 +55,18 @@ GameManager::GameManager()
 	King* WKing = new King(true, WkingPath);
 	_piecesCapturees.push_back(WKing);
 	_plateau.placer(WKing, 7, 4);
+
+	King* BKing = new King(false, BkingPath);
+	_piecesCapturees.push_back(BKing);
+	_plateau.placer(BKing, 0, 4);
+
+	Queen* WQueen = new Queen(true, WQueenPath);
+	_piecesCapturees.push_back(WQueen);
+	_plateau.placer(WQueen, 7, 3);
+
+	Queen* BQueen = new Queen(false, BQueenPath);
+	_piecesCapturees.push_back(BQueen);
+	_plateau.placer(BQueen, 0, 3);
 }
 
 void GameManager::startGame() {
