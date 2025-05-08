@@ -13,9 +13,9 @@ GameManager::GameManager()
 	QString blackKnightPath = ":/chessGame/black_knight.png";
 	QString whiteKnightPath = ":/chessGame/white_knight.png";
 	QString WkingPath = ":/chessGame/PierLucLeGoat.png";
-	QString BkingPath = ":/chessGame/BKing.png";
-	QString BQueenPath = ":/chessGame/BQueen.png";
-	QString WQueenPath = ":/chessGame/WQueen.png";
+	QString BkingPath = ":/chessGame/black_king.png";
+	QString BQueenPath = ":/chessGame/black_queen.png";
+	QString WQueenPath = ":/chessGame/white_queen.png";
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -104,6 +104,7 @@ void GameManager::onButtonClicked(int row, int column)
 		{
 			sourceRow = row;
 			sourceColumn = column;
+			_echiquier->higlightSquare(row, column);
 		}
 	}
 	else

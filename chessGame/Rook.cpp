@@ -6,7 +6,7 @@
 
 using namespace std;
 
-bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const
+bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const
 {
     if (currentRow != newRow && currentColumn != newColumn)
         return false;
@@ -21,7 +21,15 @@ bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
     }
 
     Piece* dest = plateau->getPiece(newRow, newColumn);
-    return (dest == nullptr || dest->isWhite() != this->_isWhite);
+    if (dest == nullptr || dest->isWhite() != this->_isWhite)
+    {
+        if (dest != nullptr && dest->isWhite() != this->_isWhite)
+        {
+            isCaptured = true;
+        }
+        return true;
+    }
+    return false;
 }
 
 

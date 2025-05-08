@@ -26,4 +26,5 @@ public:
 	~Echiquier();
 	void setTourLabel(const QString& text);
 	void updateBoard(int row, int column);
+	void higlightSquare(int row, int column);
 };

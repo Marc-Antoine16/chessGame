@@ -10,5 +10,5 @@ private:
 public:
 	Knight(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath) { }
 	Knight(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath) { }
-	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const;
+	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const;
 };

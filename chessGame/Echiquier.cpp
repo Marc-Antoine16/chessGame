@@ -69,3 +69,39 @@ void Echiquier::updateBoard(int row, int column) {
 		_button[row][column]->setIcon(QIcon());
 	}
 }
+
+void Echiquier::higlightSquare(int row, int column)
+{
+	Piece* piece = _plateau.getPiece(row, column);
+	if (!piece)
+		return;
+	
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
+			_button[i][j]->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
+		}
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			bool isCaptured = false;
+			if (piece->possibleMove(row, column, i, j, isCaptured, &_plateau))
+			{
+				if (isCaptured)
+				{
+					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 100); border: 3px solid rgba(178, 34, 34, 1); }");
+				}
+				else
+				{
+					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(173, 216, 230, 100); border: 3px solid rgba(135, 206, 250, 1); }");
+				}
+			}
+		}
+	}
+
+}
