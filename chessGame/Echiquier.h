@@ -7,6 +7,9 @@
 #include "Plateau.h"
 #include <QGridLayout>
 #include "Pawn.h"
+#include "GameManager.h"
+
+class GameManager;
 
 class Echiquier : public QWidget
 {
@@ -14,14 +17,13 @@ class Echiquier : public QWidget
 private:
 	
 	std::vector<std::vector<QPushButton*>> _button;
-	QLabel* _labels[8][8];
-	Plateau _plateau;
-	bool _tourBlanc;
+	Plateau& _plateau;
 	QLabel* _tourLabel;
+	GameManager* _gameManager;
 
 public:
-	Echiquier(Plateau &plateau);
+	Echiquier(Plateau& plateau, GameManager* gameManager);
 	~Echiquier();
-	void onButtonClicked(int row, int column);
+	void setTourLabel(const QString& text);
 	void updateBoard(int row, int column);
 };

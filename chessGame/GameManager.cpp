@@ -2,6 +2,8 @@
 
 GameManager::GameManager() 
 {
+	_tourBlanc = true;
+	
 	QString path = ":/chessGame/pawn_white.png";
 	QString blackPath = ":/chessGame/pawn_black.png";
 	QString WrookPath = ":/chessGame/white_rook.png";
@@ -67,10 +69,11 @@ GameManager::GameManager()
 	Queen* BQueen = new Queen(false, BQueenPath);
 	_piecesCapturees.push_back(BQueen);
 	_plateau.placer(BQueen, 0, 3);
+	
 }
 
 void GameManager::startGame() {
-	_echiquier = new Echiquier(_plateau);
+	_echiquier = new Echiquier(_plateau, this);
 	for(int i = 0; i < 8; i++)
 	{
 		for(int j = 0; j < 8; j++)
@@ -87,4 +90,34 @@ GameManager::~GameManager() {
 		delete it;
 	}
 	delete _echiquier;
+}
+
+void GameManager::onButtonClicked(int row, int column)
+{
+	static int sourceRow = -1, sourceColumn = -1;
+
+	if (sourceRow == -1 && sourceColumn == -1)
+	{
+		Piece* piece = _plateau.getPiece(row, column);
+
+		if (piece != nullptr && piece->isWhite() == _tourBlanc)
+		{
+			sourceRow = row;
+			sourceColumn = column;
+		}
+	}
+	else
+	{
+		if (_plateau.moveValid(sourceRow, sourceColumn, row, column))
+		{
+			_plateau.deplacer(sourceRow, sourceColumn, row, column);
+
+			_tourBlanc = !_tourBlanc;
+			_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+			_echiquier->updateBoard(sourceRow, sourceColumn);
+			_echiquier->updateBoard(row, column);
+		}
+		sourceRow = -1;
+		sourceColumn = -1;
+	}
 }

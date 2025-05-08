@@ -4,13 +4,11 @@
 
 using namespace std;
 
-Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
+Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plateau), _gameManager(gameManager)
 {
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
-
-	_tourBlanc = true;
 
 	_tourLabel = new QLabel("Tour des blancs", this);
 	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: rgb(250, 250, 250);");
@@ -28,7 +26,7 @@ Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 
 			connect(bouton, &QPushButton::clicked, this, [=]()
 				{
-					onButtonClicked(i, j);
+					_gameManager->onButtonClicked(i, j);
 				});
 
 			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
@@ -53,34 +51,10 @@ Echiquier::~Echiquier()
 	}
 }
 
-void Echiquier::onButtonClicked(int row, int column)
+void Echiquier::setTourLabel(const QString& text)
 {
-
-	static int sourceRow = -1, sourceColumn = -1;
-
-	if (sourceRow == -1 && sourceColumn == -1)
-	{
-		Piece* piece = _plateau.getPiece(row, column);
-
-		if (piece != nullptr && piece->isWhite() == _tourBlanc)
-		{
-			sourceRow = row;
-			sourceColumn = column;
-		}
-	}
-	else
-	{
-		if(_plateau.moveValid(sourceRow, sourceColumn, row, column))
-		{
-			_tourBlanc = !_tourBlanc;
-			_tourLabel->setText(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
-			_tourLabel->repaint();
-			updateBoard(sourceRow, sourceColumn);
-			updateBoard(row, column);
-		}
-		sourceRow = -1;
-		sourceColumn = -1;
-	}
+	_tourLabel->setText(text);
+	_tourLabel->repaint();
 }
 
 void Echiquier::updateBoard(int row, int column) {

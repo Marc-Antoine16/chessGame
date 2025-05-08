@@ -45,9 +45,6 @@ bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newCo
 	{
 		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
 		{
-			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
-			_grid[currentRow][currentColumn] = nullptr;
-			_grid[newRow][newColumn]->move(newRow, newColumn);
 			return true;
 		}
 		else
@@ -59,9 +56,6 @@ bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newCo
 	{
 		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
 		{
-			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
-			_grid[currentRow][currentColumn] = nullptr;
-			_grid[newRow][newColumn]->move(newRow, newColumn);
 			return true;
 		}
 		else
@@ -69,6 +63,16 @@ bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newCo
 			return false;
 		}
 	}
+	return false;
+}
+
+void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newColumn)
+{
+	Piece* piece = _grid[currentRow][currentColumn];
+	_grid[newRow][newColumn] = piece;
+	_grid[currentRow][currentColumn] = nullptr;
+	if (piece)
+		piece->move(newRow, newColumn);
 }
 
 bool Plateau::isOccupied(int row, int column) const

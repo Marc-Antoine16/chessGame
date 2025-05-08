@@ -15,5 +15,6 @@ public:
 	Piece* getPiece(int row, int column) const;
 	void placer(Piece* piece, int row, int column);
 	bool moveValid(int currentRow, int currentColumn, int newRow, int newColumn);
+	void deplacer(int currentRow, int currentColumn, int newRow, int newColumn);
 	bool isOccupied(int row, int column) const;
 };

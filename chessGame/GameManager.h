@@ -9,14 +9,18 @@
 #include "Queen.h"
 #include <list>
 
+class Echiquier;
+class Plateau;
 
 class GameManager {
 private:
 	Plateau _plateau;
 	Echiquier* _echiquier;
 	std::list<Piece*> _piecesCapturees;
+	bool _tourBlanc;
 public:
 	GameManager();
 	void startGame();
 	~GameManager();
+	void onButtonClicked(int row, int column);
 };
