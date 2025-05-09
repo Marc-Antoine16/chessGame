@@ -8,9 +8,11 @@ bool Knight::possibleMove(int currentRow, int currentColumn, int newRow, int new
 		Piece* dest = plateau->getPiece(newRow, newColumn);
 		{
 			Piece* dest = plateau->getPiece(newRow, newColumn);
-			if (dest == nullptr) {
+			if (dest == nullptr) 
+			{
 				return true;
 			}
+
 			else if (dest->isWhite() != this->_isWhite) {
 				isCaptured = true;
 				return true;
