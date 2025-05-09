@@ -1,6 +1,6 @@
 #include "GameManager.h"
 
-GameManager::GameManager() 
+GameManager::GameManager()
 {
 	_tourBlanc = true;
 
@@ -13,10 +13,10 @@ GameManager::GameManager()
 	_imagePath["WKnight"] = ":/chessGame/white_knight.png";
 	_imagePath["BKnight"] = ":/chessGame/black_knight.png";
 	_imagePath["WQueen"] = ":/chessGame/white_queen.png";
-	_imagePath["BQueen"] = ":/chessGame/black_queen.png";	
+	_imagePath["BQueen"] = ":/chessGame/black_queen.png";
 	_imagePath["WKing"] = ":/chessGame/PierLucLeGoat.png";
 	_imagePath["BKing"] = ":/chessGame/black_king.png";
-	
+
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -70,14 +70,13 @@ GameManager::GameManager()
 	Queen* BQueen = new Queen(false, _imagePath["BQueen"]);
 	_piecesCapturees.push_back(BQueen);
 	_plateau.placer(BQueen, 0, 3);
-	
 }
 
 void GameManager::startGame() {
 	_echiquier = new Echiquier(_plateau, this);
-	for(int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		for(int j = 0; j < 8; j++)
+		for (int j = 0; j < 8; j++)
 		{
 			_echiquier->updateBoard(i, j);
 		}
@@ -122,4 +121,35 @@ void GameManager::onButtonClicked(int row, int column)
 		sourceRow = -1;
 		sourceColumn = -1;
 	}
+}
+
+void GameManager::putInCsv(std::queue<std::vector<std::string>> moveDone)
+{
+	std::ofstream fichierE("data.csv");
+	std::string separateur = " , ";
+
+	if (fichierE)
+	{
+		while (!moveDone.empty())
+		{
+			std::vector<std::string> move = moveDone.front();
+			moveDone.pop();
+			for (size_t i = 0; i < move.size(); i++)
+			{
+				fichierE << move[i];
+				if (i != move.size() - 1)
+					fichierE << separateur;
+			}
+			fichierE << std::endl;
+		}
+	}
+	else
+	{
+		std::cerr << "Erreur d'ouverture du fichier" << std::endl;
+	}
+}
+
+void GameManager::endGame()
+{
+	putInCsv(_plateau.getMoveDone());
 }

@@ -9,6 +9,9 @@
 #include "Queen.h"
 #include <list>
 #include <map>
+#include <queue>
+#include <vector>
+#include <fstream>
 
 class Echiquier;
 class Plateau;
@@ -25,4 +28,6 @@ public:
 	void startGame();
 	~GameManager();
 	void onButtonClicked(int row, int column);
+	void putInCsv(std::queue<std::vector<std::string>> moveDone);
+	void endGame();
 };

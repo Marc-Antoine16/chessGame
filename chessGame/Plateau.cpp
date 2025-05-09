@@ -107,3 +107,8 @@ bool Plateau::isOccupied(int row, int column) const
 		return false;
 	}
 }
+
+std::queue<std::vector<std::string>> Plateau::getMoveDone() const
+{
+	return _moveDone;
+}

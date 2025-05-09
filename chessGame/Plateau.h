@@ -18,4 +18,5 @@ public:
 	bool moveValid(int currentRow, int currentColumn, int newRow, int newColumn);
 	void deplacer(int currentRow, int currentColumn, int newRow, int newColumn);
 	bool isOccupied(int row, int column) const;
+	std::queue<std::vector<std::string>> getMoveDone() const;
 };
