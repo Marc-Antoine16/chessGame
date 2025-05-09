@@ -30,3 +30,8 @@ bool Bishop::possibleMove(int currentRow, int currentColumn, int newRow, int new
 	return false;
 }
 
+std::string Bishop::getType() const
+{
+	return "bishop";
+}
+

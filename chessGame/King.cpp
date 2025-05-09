@@ -19,3 +19,8 @@ bool King::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 
     return false;
 }
+
+std::string King::getType() const
+{
+    return "king";
+}

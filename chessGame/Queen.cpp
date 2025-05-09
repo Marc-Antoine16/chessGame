@@ -48,3 +48,7 @@ bool Queen::possibleMove(int currentRow, int currentColumn, int newRow, int newC
 	return false;
 }
 
+std::string Queen::getType() const 
+{
+	return "queen";
+}

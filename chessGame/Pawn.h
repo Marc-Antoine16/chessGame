@@ -11,6 +11,7 @@ private:
 public:
 	Pawn(bool isWhite, QString& imagePath);
 	Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath);
+	std::string getType() const override;
 	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const;
 };
 

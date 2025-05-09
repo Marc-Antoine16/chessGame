@@ -51,3 +51,8 @@ bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
 
     return false;
 }
+
+std::string Pawn::getType() const
+{
+    return "pawn";
+}

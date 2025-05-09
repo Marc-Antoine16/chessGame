@@ -10,6 +10,15 @@ Plateau::Plateau()
 			_grid[i][j] = nullptr;
 		}
 	}
+	std::vector<std::string> info;
+	info.push_back("Type");
+	info.push_back("isWhite");
+	info.push_back("CurrentRow");
+	info.push_back("CurrentColumn");
+	info.push_back("NewRow");
+	info.push_back("NewColumn");
+
+	_moveDone.push(info);
 }
 
 
@@ -72,7 +81,18 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 	_grid[newRow][newColumn] = piece;
 	_grid[currentRow][currentColumn] = nullptr;
 	if (piece)
+	{
 		piece->move(newRow, newColumn);
+		std::vector<std::string> info;
+		info.push_back(piece->getType());
+		info.push_back(piece->isWhite() ? "true" : "false");
+		info.push_back(std::to_string(currentRow));
+		info.push_back(std::to_string(currentColumn));
+		info.push_back(std::to_string(newRow));
+		info.push_back(std::to_string(newColumn));
+
+		_moveDone.push(info);
+	}
 }
 
 bool Plateau::isOccupied(int row, int column) const

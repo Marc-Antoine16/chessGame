@@ -36,3 +36,7 @@ bool Knight::possibleMove(int currentRow, int currentColumn, int newRow, int new
 	return false;
 }
 
+std::string Knight::getType() const
+{
+	return "knight";
+}

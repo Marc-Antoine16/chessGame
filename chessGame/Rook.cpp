@@ -32,4 +32,7 @@ bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
     return false;
 }
 
-
+std::string Rook::getType() const
+{
+	return "rook";
+}

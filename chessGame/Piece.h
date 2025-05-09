@@ -20,6 +20,7 @@ public:
     Piece(int currentRow, int currentColumn, bool isWhite, QString& imagePath);
     bool isWhite() const;
     virtual bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const = 0;
+    virtual std::string getType() const = 0;
     void move(int newRow, int newColumn);
     void setImage(const QString& imagePath);
     QString getImagePath() const;

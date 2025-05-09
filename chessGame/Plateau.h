@@ -1,14 +1,15 @@
 #pragma once
 #include "Piece.h"
 #include <vector>
+#include <queue>
 
-class Piece; // Forward declaration of Piece class sinon erreur
+class Piece;
 
 class Plateau
 {
 private:
 	Piece* _grid[8][8];
-
+	std::queue<std::vector<std::string>> _moveDone;
 public:
 	Plateau();
 
