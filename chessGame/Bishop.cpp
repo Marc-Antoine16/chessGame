@@ -11,7 +11,7 @@ bool Bishop::possibleMove(int currentRow, int currentColumn, int newRow, int new
 		{
 			if (plateau->getPiece(row, col) != nullptr)
 			{
-				return false; // Il y a un obstacle
+				return false;
 			}
 		}
 		Piece* dest = plateau->getPiece(newRow, newColumn);
