@@ -8,6 +8,7 @@
 #include "King.h"
 #include "Queen.h"
 #include <list>
+#include <map>
 
 class Echiquier;
 class Plateau;
@@ -18,6 +19,7 @@ private:
 	Echiquier* _echiquier;
 	std::list<Piece*> _piecesCapturees;
 	bool _tourBlanc;
+	std::map < QString, QString> _imagePath;
 public:
 	GameManager();
 	void startGame();
