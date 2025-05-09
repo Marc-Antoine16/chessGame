@@ -24,7 +24,7 @@ void Plateau::placer(Piece* piece, int row, int column)
 	_grid[row][column] = piece;
 }
 
-void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
+bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newColumn)
 {
 	bool isCaptured = false;
 
@@ -36,29 +36,43 @@ void Plateau::move(int currentRow, int currentColumn, int newRow, int newColumn)
 		if (source->isWhite() != target->isWhite())
 		{
 			isCaptured = true;
-			//delete target; // Capture la pièce adverse
+
 			target = nullptr;
 		}
-
+		else return false;
 	}
 	if (isCaptured)
 	{
 		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
 		{
-			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
-			_grid[currentRow][currentColumn] = nullptr;
-			_grid[newRow][newColumn]->move(newRow, newColumn);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	else if (!isOccupied(newRow, newColumn))
 	{
 		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
 		{
-			_grid[newRow][newColumn] = _grid[currentRow][currentColumn];
-			_grid[currentRow][currentColumn] = nullptr;
-			_grid[newRow][newColumn]->move(newRow, newColumn);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
+	return false;
+}
+
+void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newColumn)
+{
+	Piece* piece = _grid[currentRow][currentColumn];
+	_grid[newRow][newColumn] = piece;
+	_grid[currentRow][currentColumn] = nullptr;
+	if (piece)
+		piece->move(newRow, newColumn);
 }
 
 bool Plateau::isOccupied(int row, int column) const

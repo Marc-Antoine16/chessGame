@@ -24,24 +24,30 @@ Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) 
 	}
 }
 
-bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const
+bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const
 {
-	int direction = _isWhite ? -1 : 1;
+    int direction = _isWhite ? -1 : 1;
+    Piece* cible = plateau->getPiece(newRow, newColumn);
 
+    if (!_isCaptured && newColumn == currentColumn && newRow == currentRow + direction)
+    {
+        return cible == nullptr; 
+    }
+    else if (!_isCaptured && newColumn == currentColumn && currentRow == (_isWhite ? 6 : 1) && newRow == currentRow + (2 * direction))
+    {
+        return cible == nullptr && plateau->getPiece(currentRow + direction, currentColumn) == nullptr;
+    }
+    else if (newColumn == currentColumn + 1 || newColumn == currentColumn - 1)
+    {
+        if (newRow == currentRow + direction)
+        {
+            if (cible != nullptr && cible->isWhite() != _isWhite)
+            {
+                isCaptured = true;
+                return true;
+            }
+        }
+    }
 
-	if (!_isCaptured && newColumn == currentColumn && newRow == currentRow + direction)
-	{
-		return plateau->getPiece(newRow, newColumn) == nullptr;
-	}
-	if (!_isCaptured && newColumn == currentColumn && currentRow == (_isWhite ? 6 : 1) && newRow == currentRow + (2 * direction))
-	{
-
-		return true;
-	}
-	if (isCaptured && newColumn != currentColumn && newRow == abs(currentRow + direction) && currentColumn != currentColumn + direction)
-	{
-		return true;
-	}
-
-	return false;
+    return false;
 }

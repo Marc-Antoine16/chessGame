@@ -4,12 +4,16 @@
 
 using namespace std;
 
-Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
+Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plateau), _gameManager(gameManager)
 {
-	_tour = 1;
 	QGridLayout* layout = new QGridLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
+
+	_tourLabel = new QLabel("Tour des blancs", this);
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: rgb(250, 250, 250);");
+
+	layout->addWidget(_tourLabel, 0, 0, 1, 8, Qt::AlignCenter);
 	int squareSize = 90;
 
 	for (int i = 0; i < 8; i++)
@@ -22,13 +26,13 @@ Echiquier::Echiquier(Plateau& plateau) : _plateau(plateau)
 
 			connect(bouton, &QPushButton::clicked, this, [=]()
 				{
-					onButtonClicked(i, j);
+					_gameManager->onButtonClicked(i, j);
 				});
 
 			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
 
 			bouton->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
-			layout->addWidget(bouton, i, j);
+			layout->addWidget(bouton, i + 1, j);
 			row.push_back(bouton);
 		}
 		_button.push_back(row);
@@ -47,28 +51,10 @@ Echiquier::~Echiquier()
 	}
 }
 
-void Echiquier::onButtonClicked(int row, int column)
+void Echiquier::setTourLabel(const QString& text)
 {
-	static int sourceRow = -1, sourceColumn = -1;
-
-	if (sourceRow == -1 && sourceColumn == -1)
-	{
-		Piece* piece = _plateau.getPiece(row, column);
-
-		if (piece != nullptr)
-		{
-			sourceRow = row;
-			sourceColumn = column;
-		}
-	}
-	else
-	{
-		_plateau.move(sourceRow, sourceColumn, row, column);
-		updateBoard(sourceRow, sourceColumn);
-		updateBoard(row, column);
-		sourceRow = -1;
-		sourceColumn = -1;
-	}
+	_tourLabel->setText(text);
+	_tourLabel->repaint();
 }
 
 void Echiquier::updateBoard(int row, int column) {
@@ -84,4 +70,38 @@ void Echiquier::updateBoard(int row, int column) {
 	}
 }
 
+void Echiquier::higlightSquare(int row, int column)
+{
+	Piece* piece = _plateau.getPiece(row, column);
+	if (!piece)
+		return;
+	
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
+			_button[i][j]->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
+		}
+	}
 
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			bool isCaptured = false;
+			if (piece->possibleMove(row, column, i, j, isCaptured, &_plateau))
+			{
+				if (isCaptured)
+				{
+					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 100); border: 3px solid rgba(178, 34, 34, 1); }");
+				}
+				else
+				{
+					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(173, 216, 230, 100); border: 3px solid rgba(135, 206, 250, 1); }");
+				}
+			}
+		}
+	}
+
+}

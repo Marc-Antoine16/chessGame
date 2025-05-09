@@ -5,17 +5,24 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Knight.h"
+#include "King.h"
+#include "Queen.h"
 #include <list>
+#include <map>
 
+class Echiquier;
+class Plateau;
 
 class GameManager {
 private:
 	Plateau _plateau;
 	Echiquier* _echiquier;
-	bool _tourBlanc;
 	std::list<Piece*> _piecesCapturees;
+	bool _tourBlanc;
+	std::map < QString, QString> _imagePath;
 public:
 	GameManager();
 	void startGame();
 	~GameManager();
+	void onButtonClicked(int row, int column);
 };

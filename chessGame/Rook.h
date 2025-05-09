@@ -8,7 +8,7 @@ private:
 	std::vector<int> _deplacement;
 
 public:
-	Rook(bool isWhite, QString& imagePath);
-	Rook(int currentRow, int currentColumn, bool isWhite, QString& imagePath);
-	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool isCaptured, Plateau* plateau) const;
+	Rook(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath) { }
+	Rook(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath) { }
+	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const;
 };
