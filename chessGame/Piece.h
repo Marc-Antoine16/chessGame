@@ -24,4 +24,5 @@ public:
     void move(int newRow, int newColumn);
     void setImage(const QString& imagePath);
     QString getImagePath() const;
+	virtual Piece* clone() const = 0;
 };

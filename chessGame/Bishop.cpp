@@ -35,3 +35,7 @@ std::string Bishop::getType() const
 	return "bishop";
 }
 
+Piece* Bishop::clone() const 
+{
+	return new Bishop(*this);
+}

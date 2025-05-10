@@ -109,14 +109,20 @@ void GameManager::onButtonClicked(int row, int column)
 	}
 	else
 	{
-		if (_plateau.moveValid(sourceRow, sourceColumn, row, column))
+		if (_plateau.moveValid(sourceRow, sourceColumn, row, column)) 
 		{
-			_plateau.deplacer(sourceRow, sourceColumn, row, column);
+			Plateau copiePlateau = _plateau;
 
-			_tourBlanc = !_tourBlanc;
-			_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
-			_echiquier->updateBoard(sourceRow, sourceColumn);
-			_echiquier->updateBoard(row, column);
+			copiePlateau.deplacer(sourceRow, sourceColumn, row, column);
+
+			if (!copiePlateau.inCheck(_tourBlanc)) 
+			{
+				_plateau.deplacer(sourceRow, sourceColumn, row, column);
+				_tourBlanc = !_tourBlanc;
+				_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+				_echiquier->updateBoard(sourceRow, sourceColumn);
+				_echiquier->updateBoard(row, column);
+			}
 		}
 		sourceRow = -1;
 		sourceColumn = -1;

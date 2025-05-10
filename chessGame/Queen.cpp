@@ -52,3 +52,8 @@ std::string Queen::getType() const
 {
 	return "queen";
 }
+
+Piece* Queen::clone() const
+{
+	return new Queen(*this);
+}

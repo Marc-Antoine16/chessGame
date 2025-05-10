@@ -11,5 +11,6 @@ public:
 	Rook(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath) { }
 	Rook(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath) { }
 	std::string getType() const override;
+	Piece* clone() const override;
 	bool possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const;
 };

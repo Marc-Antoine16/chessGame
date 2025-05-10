@@ -36,3 +36,8 @@ std::string Rook::getType() const
 {
 	return "rook";
 }
+
+Piece* Rook::clone() const
+{
+	return new Rook(*this);
+}

@@ -21,6 +21,25 @@ Plateau::Plateau()
 	_moveDone.push(info);
 }
 
+Plateau::Plateau(const Plateau& plateau)
+{
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			if (plateau._grid[i][j] != nullptr)
+			{
+				_grid[i][j] = plateau._grid[i][j]->clone();
+			}
+			else
+			{
+				_grid[i][j] = nullptr;
+			}
+		}
+	}
+	_moveDone = plateau._moveDone;
+}
+
 
 
 Piece* Plateau::getPiece(int row, int column) const
@@ -111,4 +130,38 @@ bool Plateau::isOccupied(int row, int column) const
 std::queue<std::vector<std::string>> Plateau::getMoveDone() const
 {
 	return _moveDone;
+}
+
+bool Plateau::inCheck(bool isWhite)
+{
+	int kingRow = -1, kingColumn = -1;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			Piece* piece = _grid[i][j];
+			if (piece != nullptr && piece->getType() == "king" && piece->isWhite() == isWhite)
+			{
+				kingRow = i;
+				kingColumn = j;
+				break;
+			}
+		}
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			Piece* piece = _grid[i][j];
+			if (piece != nullptr && piece->isWhite() != isWhite)
+			{
+				bool isCaptured = true;
+				if (piece->possibleMove(i, j, kingRow, kingColumn, isCaptured, this))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }

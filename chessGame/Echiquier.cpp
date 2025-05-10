@@ -75,7 +75,7 @@ void Echiquier::higlightSquare(int row, int column)
 	Piece* piece = _plateau.getPiece(row, column);
 	if (!piece)
 		return;
-	
+
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -92,16 +92,21 @@ void Echiquier::higlightSquare(int row, int column)
 			bool isCaptured = false;
 			if (piece->possibleMove(row, column, i, j, isCaptured, &_plateau))
 			{
-				if (isCaptured)
+				Plateau copie = _plateau;
+				copie.deplacer(row, column, i, j);
+
+				if (!copie.inCheck(piece->isWhite()))
 				{
-					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 100); border: 3px solid rgba(178, 34, 34, 1); }");
-				}
-				else
-				{
-					_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(173, 216, 230, 100); border: 3px solid rgba(135, 206, 250, 1); }");
+					if (isCaptured)
+					{
+						_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 100); border: 3px solid rgba(178, 34, 34, 1); }");
+					}
+					else
+					{
+						_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(173, 216, 230, 100); border: 3px solid rgba(135, 206, 250, 1); }");
+					}
 				}
 			}
 		}
 	}
-
 }

@@ -40,3 +40,8 @@ std::string Knight::getType() const
 {
 	return "knight";
 }
+
+Piece* Knight::clone() const
+{
+	return new Knight(*this);
+}

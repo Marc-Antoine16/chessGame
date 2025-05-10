@@ -56,3 +56,8 @@ std::string Pawn::getType() const
 {
     return "pawn";
 }
+
+Piece* Pawn::clone() const
+{
+	return new Pawn(*this);
+}

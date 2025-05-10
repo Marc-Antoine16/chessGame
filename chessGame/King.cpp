@@ -1,26 +1,31 @@
 #include "King.h"
 
 
-bool King::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const
+bool King::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool& isCaptured, Plateau* plateau) const
 {
-    if (abs(currentRow - newRow) > 1 || abs(currentColumn - newColumn) > 1)
-        return false;
+	if (abs(currentRow - newRow) > 1 || abs(currentColumn - newColumn) > 1)
+		return false;
 
-    Piece* dest = plateau->getPiece(newRow, newColumn);
+	Piece* dest = plateau->getPiece(newRow, newColumn);
 
-    if (dest != nullptr && dest->isWhite() != this->isWhite())
-    {
-        isCaptured = true;
-        return true;
-    }
+	if (dest != nullptr && dest->isWhite() != this->isWhite())
+	{
+		isCaptured = true;
+		return true;
+	}
 
-    if (dest == nullptr)
-        return true;
+	if (dest == nullptr)
+		return true;
 
-    return false;
+	return false;
 }
 
 std::string King::getType() const
 {
-    return "king";
+	return "king";
+}
+
+Piece* King::clone() const
+{
+	return new King(*this);
 }
