@@ -1,7 +1,9 @@
 #include "GameManager.h"
 
-GameManager::GameManager()
+GameManager::GameManager(int temps)
 {
+	_tempsB = temps;
+	_tempsN = temps;
 	_tourBlanc = true;
 
 	_imagePath["WPawn"] = ":/chessGame/pawn_white.png";
@@ -72,6 +74,17 @@ GameManager::GameManager()
 	_plateau.placer(BQueen, 0, 3);
 }
 
+void GameManager::onTimeoutBlanc() {
+	_tempsB--;  
+	_echiquier->updateTimerLabel(_tempsB, true);  // Met à jour l'affichage du temps
+}
+
+void GameManager::onTimeoutNoir() {
+	_tempsN--;  
+	_echiquier->updateTimerLabel(_tempsN, false);  // Met à jour l'affichage du temps
+}
+
+
 void GameManager::startGame() {
 	_echiquier = new Echiquier(_plateau, this);
 	for (int i = 0; i < 8; i++)
@@ -81,6 +94,17 @@ void GameManager::startGame() {
 			_echiquier->updateBoard(i, j);
 		}
 	}
+	_timerB = new QTimer(this);
+	_timerN = new QTimer(this);
+
+	connect(_timerB, &QTimer::timeout, this, &GameManager::onTimeoutBlanc);
+	connect(_timerN, &QTimer::timeout, this, &GameManager::onTimeoutNoir);
+
+	_timerB->start(1000); // 1 seconde
+	_timerN->start(1000);  // 1 seconde
+
+	_timerN->stop(); // Commencez avec le timer des noirs
+
 	_echiquier->setWindowTitle("jeu d'echec");
 	_echiquier->show();
 }
@@ -118,6 +142,8 @@ void GameManager::onButtonClicked(int row, int column)
 			if (!copiePlateau.inCheck(_tourBlanc)) 
 			{
 				_plateau.deplacer(sourceRow, sourceColumn, row, column);
+				_tourBlanc ? _timerB->stop() : _timerN->stop();
+				_tourBlanc ? _timerN->start() : _timerB->start();
 				_tourBlanc = !_tourBlanc;
 				_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
 				_echiquier->updateBoard(sourceRow, sourceColumn);

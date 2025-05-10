@@ -10,10 +10,22 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plat
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
 
-	_tourLabel = new QLabel("Tour des blancs", this);
-	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: rgb(250, 250, 250);");
+	QHBoxLayout* topLayout = new QHBoxLayout();
+	topLayout->setSpacing(100);
 
-	layout->addWidget(_tourLabel, 0, 0, 1, 8, Qt::AlignCenter);
+	_timerBlancLabel = new QLabel("05:00", this);
+	_timerBlancLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	topLayout->addWidget(_timerBlancLabel);
+
+	_tourLabel = new QLabel("Tour des blancs", this);
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	topLayout->addWidget(_tourLabel);
+
+	_timerNoirLabel = new QLabel("05:00", this);
+	_timerNoirLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	topLayout->addWidget(_timerNoirLabel);
+
+	layout->addLayout(topLayout, 0, 0, 1, 8, Qt::AlignCenter);
 	int squareSize = 90;
 
 	for (int i = 0; i < 8; i++)
@@ -56,6 +68,21 @@ void Echiquier::setTourLabel(const QString& text)
 	_tourLabel->setText(text);
 	_tourLabel->repaint();
 }
+
+void Echiquier::updateTimerLabel(int temps, bool estBlanc) {
+	
+		int minutes = temps / 60;
+		int secondes = temps % 60;
+		QString timeText = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(secondes, 2, 10, QChar('0'));
+
+		if (estBlanc) {
+			_timerBlancLabel->setText(timeText); // Met à jour le timer des blancs
+		}
+		else {
+			_timerNoirLabel->setText(timeText); // Met à jour le timer des noirs
+		}
+}
+
 
 void Echiquier::updateBoard(int row, int column) {
 	int iconSize = 80;

@@ -19,6 +19,8 @@ private:
 	std::vector<std::vector<QPushButton*>> _button;
 	Plateau& _plateau;
 	QLabel* _tourLabel;
+	QLabel* _timerBlancLabel;
+	QLabel* _timerNoirLabel;
 	GameManager* _gameManager;
 
 public:
@@ -27,4 +29,5 @@ public:
 	void setTourLabel(const QString& text);
 	void updateBoard(int row, int column);
 	void higlightSquare(int row, int column);
+	void updateTimerLabel(int temps, bool estBlanc);
 };
