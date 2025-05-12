@@ -75,6 +75,7 @@ GameManager::GameManager()
 
 void GameManager::startGame() {
 	_echiquier = new Echiquier(_plateau, this);
+	_plateau.setEchiquier(_echiquier);
 	for(int i = 0; i < 8; i++)
 	{
 		for(int j = 0; j < 8; j++)

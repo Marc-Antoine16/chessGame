@@ -92,7 +92,7 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 	Piece* piece = _grid[currentRow][currentColumn];
 
 
-	if (piece->getType() == "king" && abs(newColumn - currentColumn) == 2) //la tour se deplace mais pas son image...
+	if (piece->getType() == "king" && abs(newColumn - currentColumn) == 2)
 	{
 		int rookColumn = (newColumn > currentColumn) ? 7 : 0;
 		Piece* rook = _grid[currentRow][rookColumn];
@@ -100,15 +100,13 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 		_grid[currentRow][rookColumn] = nullptr;
 		if (rook)
 		{
-			
 			if (newColumn > currentColumn)
 			{
 				_grid[currentRow][currentColumn + 1] = rook;
 				rook->move(currentRow, currentColumn + 1);
 
-				
-				/*_echiquier->updateBoard(currentRow, rookColumn);*/
-				
+				_echiquier->updateBoard(currentRow, rookColumn);
+				_echiquier->updateBoard(currentRow, currentColumn + 1);
 			}
 			else
 			{
@@ -116,9 +114,8 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 				rook->move(currentRow, currentColumn - 1);
 
 				
-				/*_echiquier->updateBoard(currentRow, rookColumn);*/
-
-				
+				_echiquier->updateBoard(currentRow, rookColumn);
+				_echiquier->updateBoard(currentRow, currentColumn - 1);
 			}
 		}
 	}
@@ -144,6 +141,11 @@ bool Plateau::isOccupied(int row, int column) const
 	{
 		return false;
 	}
+}
+
+void Plateau::setEchiquier(Echiquier* echiquier)
+{
+	_echiquier = echiquier;
 }
 
 

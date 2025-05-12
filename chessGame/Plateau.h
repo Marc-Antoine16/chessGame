@@ -22,5 +22,5 @@ void placer(Piece* piece, int row, int column);
 bool moveValid(int currentRow, int currentColumn, int newRow, int newColumn, Plateau *plateau);  
 void deplacer(int currentRow, int currentColumn, int newRow, int newColumn);  
 bool isOccupied(int row, int column) const;  
-
+void setEchiquier(Echiquier* echiquier);
 };
