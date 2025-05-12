@@ -2,6 +2,7 @@
 #include <QWidget>  
 #include <QPixmap>  
 #include "Plateau.h"
+#include <QIcon>
 
 class Plateau;
 
@@ -13,6 +14,10 @@ protected:
     int _currentColumn;
     QString _imagePath;
     bool _isCaptured;
+    bool _hasMoved = false;
+
+    bool _whiteKingMoved = false;  
+    bool _blackKingMoved = false;   
 
 public:
 
@@ -23,4 +28,12 @@ public:
     void move(int newRow, int newColumn);
     void setImage(const QString& imagePath);
     QString getImagePath() const;
+	virtual std::string getType() const =0;
+
+    virtual void setMoved(bool moved) { _hasMoved = moved; }
+    virtual bool hasMoved() const { return _hasMoved; }
+
+    virtual bool whiteKingMoved() const { return _whiteKingMoved; }
+    virtual bool blackKingMoved() const { return _blackKingMoved; }
+
 };

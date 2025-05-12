@@ -14,6 +14,11 @@ class GameManager;
 class Echiquier : public QWidget
 {
 	Q_OBJECT
+
+public:
+	
+
+ 
 private:
 	
 	std::vector<std::vector<QPushButton*>> _button;

@@ -1,7 +1,8 @@
+
 #include "Rook.h"
 #include <vector>
 #include "Plateau.h"
-#include "Piece.h"
+
 
 
 using namespace std;
@@ -31,5 +32,6 @@ bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newCo
     }
     return false;
 }
+ 
 
 

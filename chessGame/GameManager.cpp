@@ -96,6 +96,7 @@ GameManager::~GameManager() {
 void GameManager::onButtonClicked(int row, int column)
 {
 	static int sourceRow = -1, sourceColumn = -1;
+	Plateau* plateau = &_plateau;
 
 	if (sourceRow == -1 && sourceColumn == -1)
 	{
@@ -110,14 +111,15 @@ void GameManager::onButtonClicked(int row, int column)
 	}
 	else
 	{
-		if (_plateau.moveValid(sourceRow, sourceColumn, row, column))
+		if (_plateau.moveValid(sourceRow, sourceColumn, row, column, plateau))
 		{
-			_plateau.deplacer(sourceRow, sourceColumn, row, column);
 
+			_plateau.deplacer(sourceRow, sourceColumn, row, column);
 			_tourBlanc = !_tourBlanc;
 			_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
 			_echiquier->updateBoard(sourceRow, sourceColumn);
 			_echiquier->updateBoard(row, column);
+			
 		}
 		sourceRow = -1;
 		sourceColumn = -1;

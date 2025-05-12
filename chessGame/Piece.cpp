@@ -29,6 +29,7 @@ void Piece::move(int newRow, int newColumn)
 {
     _currentRow = newRow;
     _currentColumn = newColumn;
+
 }
 
 void Piece::setImage(const QString& imagePath)
@@ -40,3 +41,4 @@ QString Piece::getImagePath() const
 {
     return _imagePath;
 }
+

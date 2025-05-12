@@ -57,15 +57,21 @@ void Echiquier::setTourLabel(const QString& text)
 	_tourLabel->repaint();
 }
 
-void Echiquier::updateBoard(int row, int column) {
+void Echiquier::updateBoard(int row, int column) 
+{
 	int iconSize = 80;
-	Piece* piece = _plateau.getPiece(row, column);
 
-	if (piece) {
+	
+
+	Piece* piece = _plateau.getPiece(row, column);
+	
+	if (piece)
+	{
 		_button[row][column]->setIcon(QIcon(piece->getImagePath()));
 		_button[row][column]->setIconSize(QSize(iconSize, iconSize));
 	}
-	else {
+	else
+	{
 		_button[row][column]->setIcon(QIcon());
 	}
 }
