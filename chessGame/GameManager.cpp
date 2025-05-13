@@ -87,6 +87,7 @@ void GameManager::onTimeoutNoir() {
 
 void GameManager::startGame() {
 	_echiquier = new Echiquier(_plateau, this);
+	_plateau.setEchiquier(_echiquier);
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -119,6 +120,7 @@ GameManager::~GameManager() {
 void GameManager::onButtonClicked(int row, int column)
 {
 	static int sourceRow = -1, sourceColumn = -1;
+	Plateau* plateau = &_plateau;
 
 	if (sourceRow == -1 && sourceColumn == -1)
 	{

@@ -1,5 +1,5 @@
 #include "Plateau.h"
-
+#include "Echiquier.h"
 
 Plateau::Plateau()
 {
@@ -38,6 +38,7 @@ Plateau::Plateau(const Plateau& plateau)
 		}
 	}
 	_moveDone = plateau._moveDone;
+	_echiquier = plateau._echiquier;
 }
 
 
@@ -97,6 +98,38 @@ bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newCo
 void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newColumn)
 {
 	Piece* piece = _grid[currentRow][currentColumn];
+
+	if (piece->getType() == "king" && abs(newColumn - currentColumn) == 2)
+	{
+		
+		int rookColumn = (newColumn > currentColumn) ? 7 : 0;
+		Piece* rook = _grid[currentRow][rookColumn];
+		_grid[currentRow][rookColumn] = nullptr;
+
+		if (rook)
+		{
+			if (newColumn > currentColumn)
+			{
+				_grid[currentRow][currentColumn + 1] = rook;
+				rook->move(currentRow, currentColumn + 1);
+
+				_echiquier->updateBoard(currentRow, rookColumn);
+				_echiquier->updateBoard(currentRow, currentColumn + 1);
+			}
+			else
+			{
+				_grid[currentRow][currentColumn - 1] = rook;
+				rook->move(currentRow,currentColumn-1);
+
+				_echiquier->updateBoard(currentRow, rookColumn);
+				_echiquier->updateBoard(currentRow, currentColumn - 1);
+			}
+			
+		}
+
+
+	}
+
 	_grid[newRow][newColumn] = piece;
 	_grid[currentRow][currentColumn] = nullptr;
 	if (piece)
@@ -164,4 +197,9 @@ bool Plateau::inCheck(bool isWhite)
 		}
 	}
 	return false;
+}
+
+void Plateau::setEchiquier(Echiquier* echiquier)
+{
+	_echiquier = echiquier;
 }

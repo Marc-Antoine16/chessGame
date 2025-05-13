@@ -4,11 +4,13 @@
 #include <queue>
 
 class Piece;
+class Echiquier;
 
 class Plateau
 {
 private:
 	Piece* _grid[8][8];
+	Echiquier* _echiquier;
 	std::queue<std::vector<std::string>> _moveDone;
 public:
 	Plateau();
@@ -20,4 +22,5 @@ public:
 	bool isOccupied(int row, int column) const;
 	std::queue<std::vector<std::string>> getMoveDone() const;
 	bool inCheck(bool isWhite);
+	void setEchiquier(Echiquier* echiquier);
 };
