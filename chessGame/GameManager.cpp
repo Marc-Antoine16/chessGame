@@ -76,18 +76,21 @@ GameManager::GameManager(int temps)
 
 void GameManager::onTimeoutBlanc() {
 	_tempsB--;  
-	_echiquier->updateTimerLabel(_tempsB, true);  // Met à jour l'affichage du temps
+	_echiquier->updateTimerLabel(_tempsB, true);
 }
 
 void GameManager::onTimeoutNoir() {
 	_tempsN--;  
-	_echiquier->updateTimerLabel(_tempsN, false);  // Met à jour l'affichage du temps
+	_echiquier->updateTimerLabel(_tempsN, false);
 }
 
 
 void GameManager::startGame() {
+	connect(_echiquier, &Echiquier::fenetreFermee, this, &GameManager::endGame);
 	_echiquier = new Echiquier(_plateau, this);
 	_plateau.setEchiquier(_echiquier);
+	connect(_echiquier, &Echiquier::nouvellePartieDemandee, this, &GameManager::startNewGame);
+	connect(_echiquier, &Echiquier::chargementPartieDemande, this, &GameManager::loadGame);
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -101,10 +104,10 @@ void GameManager::startGame() {
 	connect(_timerB, &QTimer::timeout, this, &GameManager::onTimeoutBlanc);
 	connect(_timerN, &QTimer::timeout, this, &GameManager::onTimeoutNoir);
 
-	_timerB->start(1000); // 1 seconde
-	_timerN->start(1000);  // 1 seconde
+	_timerB->start(1000);
+	_timerN->start(1000); 
 
-	_timerN->stop(); // Commencez avec le timer des noirs
+	_timerN->stop();
 
 	_echiquier->setWindowTitle("jeu d'echec");
 	_echiquier->show();
@@ -135,13 +138,13 @@ void GameManager::onButtonClicked(int row, int column)
 	}
 	else
 	{
-		if (_plateau.moveValid(sourceRow, sourceColumn, row, column)) 
+		if (_plateau.moveValid(sourceRow, sourceColumn, row, column))
 		{
 			Plateau copiePlateau = _plateau;
 
 			copiePlateau.deplacer(sourceRow, sourceColumn, row, column);
 
-			if (!copiePlateau.inCheck(_tourBlanc)) 
+			if (!copiePlateau.inCheck(_tourBlanc))
 			{
 				_plateau.deplacer(sourceRow, sourceColumn, row, column);
 				_tourBlanc ? _timerB->stop() : _timerN->stop();
@@ -150,6 +153,17 @@ void GameManager::onButtonClicked(int row, int column)
 				_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
 				_echiquier->updateBoard(sourceRow, sourceColumn);
 				_echiquier->updateBoard(row, column);
+			}
+			else
+			{
+				if (_plateau.checkMate(_tourBlanc))
+				{
+					_echiquier->setTourLabel(_tourBlanc ? "Echec et mat ! Les noirs gagnent !" : "Echec et mat ! Les blancs gagnent !");
+					_timerB->stop();
+					_timerN->stop();
+					endGame();
+					return;
+				}
 			}
 		}
 		sourceRow = -1;
@@ -186,4 +200,154 @@ void GameManager::putInCsv(std::queue<std::vector<std::string>> moveDone)
 void GameManager::endGame()
 {
 	putInCsv(_plateau.getMoveDone());
+}
+
+void GameManager::startNewGame() 
+{
+	_timerB->stop();
+	_timerN->stop();
+
+	setupPieces();
+
+	_echiquier->higlightSquare(4, 4);
+
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
+			_echiquier->updateBoard(i, j);
+
+	_tempsB = _tempsN = 300;
+	_tourBlanc = true;
+
+	_echiquier->setTourLabel("Tour des blancs");
+	_timerB->start(1000);
+	_timerN->stop();
+}
+
+void GameManager::loadGame() 
+{
+	_plateau.clear();
+	_echiquier->resetBoard();
+	_piecesCapturees.clear();
+
+	setupPieces();
+
+	_echiquier->higlightSquare(4, 4);
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			_echiquier->updateBoard(i, j);
+		}
+	}
+
+	std::vector<std::vector<std::string>> tousLesCoups;
+	int index;
+	std::ifstream file("data.csv");
+	std::string ligne;
+	std::getline(file, ligne);
+	while (std::getline(file, ligne)) {
+		std::stringstream ss(ligne);
+		std::string type, couleur, row1, col1, row2, col2;
+		std::getline(ss, type, ',');
+		std::getline(ss, couleur, ',');
+		std::getline(ss, row1, ',');
+		std::getline(ss, col1, ',');
+		std::getline(ss, row2, ',');
+		std::getline(ss, col2, ',');
+
+		tousLesCoups.push_back({ type, couleur, row1, col1, row2, col2 });
+	}
+
+	rejouerCoupsAvecPause(tousLesCoups, 0);
+	file.close();
+}
+
+void GameManager::rejouerCoupsAvecPause(std::vector<std::vector<std::string>> coups, int index)
+{
+	if (index >= coups.size()) return;
+
+	const auto& coup = coups[index];
+
+	int i1 = std::stoi(coup[2]) - 1;
+	int j1 = std::stoi(coup[3]) - 1;
+	int i2 = std::stoi(coup[4]) - 1;
+	int j2 = std::stoi(coup[5]) - 1;
+
+	_plateau.deplacer(i1, j1, i2, j2);
+	_echiquier->updateBoard(i1, j1);
+	_echiquier->updateBoard(i2, j2);
+	_tourBlanc ? _timerB->stop() : _timerN->stop();
+	_tourBlanc ? _timerN->start() : _timerB->start();
+	_tourBlanc = !_tourBlanc;
+	_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+
+	QTimer::singleShot(100, [=]() {
+		rejouerCoupsAvecPause(coups, index + 1);
+		});
+}
+
+void GameManager::setupPieces() {
+	for (auto piece : _piecesCapturees) 
+	{
+		delete piece;
+	}
+	_plateau.clear(); 
+	_piecesCapturees.clear();
+
+	for (int i = 0; i < 8; ++i)
+		for (int j = 0; j < 8; ++j)
+			_echiquier->updateBoard(i, j);
+
+	for (int i = 0; i < 8; i++)
+	{
+		Pawn* pawn = new Pawn(true, _imagePath["WPawn"]);
+		_piecesCapturees.push_back(pawn);
+		_plateau.placer(pawn, 6, i);
+		Pawn* blackPawn = new Pawn(false, _imagePath["BPawn"]);
+		_piecesCapturees.push_back(blackPawn);
+		_plateau.placer(blackPawn, 1, i);
+	}
+	Rook* rook = new Rook(true, _imagePath["WRook"]);
+	_piecesCapturees.push_back(rook);
+	_plateau.placer(rook, 7, 0);
+	_plateau.placer(rook, 7, 7);
+	Rook* blackRook = new Rook(false, _imagePath["BRook"]);
+	_piecesCapturees.push_back(blackRook);
+	_plateau.placer(blackRook, 0, 7);
+	_plateau.placer(blackRook, 0, 0);
+
+	Bishop* bishop = new Bishop(true, _imagePath["WBishop"]);
+	_piecesCapturees.push_back(bishop);
+	_plateau.placer(bishop, 7, 2);
+	_plateau.placer(bishop, 7, 5);
+	Bishop* blackBishop = new Bishop(false, _imagePath["BBishop"]);
+	_piecesCapturees.push_back(blackBishop);
+	_plateau.placer(blackBishop, 0, 5);
+	_plateau.placer(blackBishop, 0, 2);
+
+	Knight* Wknight = new Knight(true, _imagePath["WKnight"]);
+	_piecesCapturees.push_back(Wknight);
+	_plateau.placer(Wknight, 7, 1);
+	_plateau.placer(Wknight, 7, 6);
+	Knight* bKnight = new Knight(false, _imagePath["BKnight"]);
+	_piecesCapturees.push_back(bKnight);
+	_plateau.placer(bKnight, 0, 6);
+	_plateau.placer(bKnight, 0, 1);
+
+	King* WKing = new King(true, _imagePath["WKing"]);
+	_piecesCapturees.push_back(WKing);
+	_plateau.placer(WKing, 7, 4);
+
+	King* BKing = new King(false, _imagePath["BKing"]);
+	_piecesCapturees.push_back(BKing);
+	_plateau.placer(BKing, 0, 4);
+
+	Queen* WQueen = new Queen(true, _imagePath["WQueen"]);
+	_piecesCapturees.push_back(WQueen);
+	_plateau.placer(WQueen, 7, 3);
+
+	Queen* BQueen = new Queen(false, _imagePath["BQueen"]);
+	_piecesCapturees.push_back(BQueen);
+	_plateau.placer(BQueen, 0, 3);
 }

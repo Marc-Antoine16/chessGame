@@ -1,12 +1,47 @@
 #include "Echiquier.h"
 #include <QGridLayout>
 #include <QIcon>
+#include <QCloseEvent>
 
 using namespace std;
 
-Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plateau), _gameManager(gameManager)
+Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : QMainWindow(), _plateau(plateau), _gameManager(gameManager)
 {
-	QGridLayout* layout = new QGridLayout(this);
+	this->setStyleSheet("background-color: lightgray;");
+	QWidget* centralWidget = new QWidget(this);
+	setCentralWidget(centralWidget);
+
+	QGridLayout* layout = new QGridLayout(centralWidget);
+
+	QMenuBar* menuBar = new QMenuBar(this);
+	QMenu* menuFichier = new QMenu("MENU", this);
+	menuFichier->setStyleSheet("background-color: lightgray; color: black; font-size: 20px; font-weight: bold; font-style: oblique; padding : 5px;border: 3px solid white;");
+	menuBar->setStyleSheet("background-color: lightgray; color: black; font-size: 20px; font-weight: bold; padding : 5px;");
+
+	QAction* actionNouvelle = new QAction("Nouvelle partie", this);
+	QAction* actionCharger = new QAction("Charger une partie", this);
+	QAction* actionChangerCouleur = new QAction("Changer couleur du plateau", this);
+	QAction* actionQuitter = new QAction("Quitter", this);
+
+	menuFichier->addAction(actionNouvelle);
+	menuFichier->addAction(actionCharger);
+	menuFichier->addSeparator();
+	menuFichier->addAction(actionChangerCouleur);
+	menuFichier->addSeparator();
+	menuFichier->addAction(actionQuitter); 
+	
+
+	
+
+	menuBar->addMenu(menuFichier);
+	setMenuBar(menuBar);
+
+	connect(actionNouvelle, &QAction::triggered, this, &Echiquier::demanderNouvellePartie);
+	
+	connect(actionCharger, &QAction::triggered, this, &Echiquier::demanderChargerPartie);
+	connect(actionChangerCouleur, &QAction::triggered, this, &Echiquier::changerCouleurPlateau);
+	connect(actionQuitter, &QAction::triggered, this, & QWidget::close);
+
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
 
@@ -14,18 +49,19 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plat
 	topLayout->setSpacing(100);
 
 	_timerBlancLabel = new QLabel("05:00", this);
-	_timerBlancLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	_timerBlancLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_timerBlancLabel);
 
 	_tourLabel = new QLabel("Tour des blancs", this);
-	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_tourLabel);
 
 	_timerNoirLabel = new QLabel("05:00", this);
-	_timerNoirLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black;");
+	_timerNoirLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_timerNoirLabel);
 
 	layout->addLayout(topLayout, 0, 0, 1, 8, Qt::AlignCenter);
+
 	int squareSize = 90;
 
 	for (int i = 0; i < 8; i++)
@@ -41,15 +77,14 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : _plateau(plat
 					_gameManager->onButtonClicked(i, j);
 				});
 
-			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
-
+			QString couleur = ((i + j) % 2 == 0) ? _couleurClair.name() : _couleurFonce.name();
 			bouton->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
+
 			layout->addWidget(bouton, i + 1, j);
 			row.push_back(bouton);
 		}
 		_button.push_back(row);
 	}
-	setLayout(layout);
 }
 
 Echiquier::~Echiquier()
@@ -66,6 +101,7 @@ Echiquier::~Echiquier()
 void Echiquier::setTourLabel(const QString& text)
 {
 	_tourLabel->setText(text);
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px");
 	_tourLabel->repaint();
 }
 
@@ -76,10 +112,10 @@ void Echiquier::updateTimerLabel(int temps, bool estBlanc) {
 		QString timeText = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(secondes, 2, 10, QChar('0'));
 
 		if (estBlanc) {
-			_timerBlancLabel->setText(timeText); // Met à jour le timer des blancs
+			_timerBlancLabel->setText(timeText);
 		}
 		else {
-			_timerNoirLabel->setText(timeText); // Met à jour le timer des noirs
+			_timerNoirLabel->setText(timeText);
 		}
 }
 
@@ -100,17 +136,18 @@ void Echiquier::updateBoard(int row, int column) {
 void Echiquier::higlightSquare(int row, int column)
 {
 	Piece* piece = _plateau.getPiece(row, column);
-	if (!piece)
-		return;
-
+	
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			QString couleur = ((i + j) % 2 == 0) ? "rgb(210, 180, 140)" : "rgb(101, 67, 33)";
+			QString couleur = ((i + j) % 2 == 0) ? _couleurClair.name() : _couleurFonce.name();
 			_button[i][j]->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
 		}
 	}
+
+	if (!piece)
+		return;
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -126,14 +163,60 @@ void Echiquier::higlightSquare(int row, int column)
 				{
 					if (isCaptured)
 					{
-						_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 100); border: 3px solid rgba(178, 34, 34, 1); }");
+						_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(255, 69, 0, 150); border: 3px solid rgba(178, 34, 34, 1); }");
 					}
 					else
 					{
-						_button[i][j]->setStyleSheet("QPushButton { background-color: rgba(173, 216, 230, 100); border: 3px solid rgba(135, 206, 250, 1); }");
+						_button[i][j]->setStyleSheet("QPushButton { background-color: rgb(173, 216, 230); border: 3px solid rgba(135, 206, 250, 1); }");
 					}
 				}
 			}
+		}
+	}
+}
+
+void Echiquier::demanderNouvellePartie() {
+	emit nouvellePartieDemandee();
+}
+
+void Echiquier::demanderChargerPartie() {
+	emit chargementPartieDemande();
+}
+
+void Echiquier::closeEvent(QCloseEvent* event)
+{
+	if (_gameManager)
+	{
+		_gameManager->putInCsv(_plateau.getMoveDone());
+	}
+	emit fenetreFermee();
+	QMainWindow::closeEvent(event);
+}
+
+void Echiquier::resetBoard() {
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			updateBoard(i, j);
+		}
+	}
+}
+
+void Echiquier::changerCouleurPlateau()
+{
+	QColor color1 = QColorDialog::getColor(Qt::white, this, "Couleur des cases claires");
+	QColor color2 = QColorDialog::getColor(Qt::black, this, "Couleur des cases foncees");
+
+	if (!color1.isValid() || !color2.isValid()) return;
+
+	_couleurClair = color1;
+	_couleurFonce = color2;
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			QString couleur = ((i + j) % 2 == 0) ? color1.name() : color2.name();
+			_button[i][j]->setStyleSheet(QString("QPushButton { background-color: %1; border: none; }").arg(couleur));
 		}
 	}
 }

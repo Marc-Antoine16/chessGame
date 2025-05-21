@@ -1,5 +1,6 @@
 #include "Plateau.h"
 #include "Echiquier.h"
+#include "Queen.h"
 
 Plateau::Plateau()
 {
@@ -58,48 +59,41 @@ bool Plateau::moveValid(int currentRow, int currentColumn, int newRow, int newCo
 	bool isCaptured = false;
 
 	Piece* source = _grid[currentRow][currentColumn];
+	if (!source)
+		return false;
+
 	Piece* target = _grid[newRow][newColumn];
 
-	if (target != nullptr && source != nullptr)
+	if (target != nullptr)
 	{
 		if (source->isWhite() != target->isWhite())
 		{
 			isCaptured = true;
-
-			target = nullptr;
-		}
-		else return false;
-	}
-	if (isCaptured)
-	{
-		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
-		{
-			return true;
 		}
 		else
 		{
 			return false;
 		}
 	}
-	else if (!isOccupied(newRow, newColumn))
-	{
-		if (_grid[currentRow][currentColumn]->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	return false;
+	return source->possibleMove(currentRow, currentColumn, newRow, newColumn, isCaptured, this);
 }
 
 void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newColumn)
 {
 	Piece* piece = _grid[currentRow][currentColumn];
 
-	if (piece->getType() == "king" && abs(newColumn - currentColumn) == 2)
+	if (!piece)
+		return;
+
+	if (piece->getType() == "pawn" && newRow == (piece->isWhite() ? 0 : 7))
+	{
+		_grid[newRow][newColumn] = promote(piece);
+		piece = _grid[newRow][newColumn];
+		_grid[currentRow][currentColumn] = nullptr;
+		_grid[newRow][newColumn]->move(newRow, newColumn);
+	}
+
+	else if (piece->getType() == "king" && abs(newColumn - currentColumn) == 2)
 	{
 		
 		int rookColumn = (newColumn > currentColumn) ? 7 : 0;
@@ -123,8 +117,7 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 
 				_echiquier->updateBoard(currentRow, rookColumn);
 				_echiquier->updateBoard(currentRow, currentColumn - 1);
-			}
-			
+			}	
 		}
 
 
@@ -137,11 +130,11 @@ void Plateau::deplacer(int currentRow, int currentColumn, int newRow, int newCol
 		piece->move(newRow, newColumn);
 		std::vector<std::string> info;
 		info.push_back(piece->getType());
-		info.push_back(piece->isWhite() ? "true" : "false");
-		info.push_back(std::to_string(currentRow));
-		info.push_back(std::to_string(currentColumn));
-		info.push_back(std::to_string(newRow));
-		info.push_back(std::to_string(newColumn));
+		info.push_back(piece->isWhite() ? "blanc" : "noir");
+		info.push_back(std::to_string(currentRow + 1));
+		info.push_back(std::to_string(currentColumn + 1));
+		info.push_back(std::to_string(newRow + 1));
+		info.push_back(std::to_string(newColumn + 1));
 
 		_moveDone.push(info);
 	}
@@ -199,7 +192,53 @@ bool Plateau::inCheck(bool isWhite)
 	return false;
 }
 
+bool Plateau::checkMate(bool isWhite) 
+{
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			Piece* piece = getPiece(i, j);
+			if (piece != nullptr && piece->isWhite() == isWhite) {
+
+				for (int newRow = 0; newRow < 8; newRow++) {
+					for (int newCol = 0; newCol < 8; newCol++) {
+						bool isCaptured = false;
+
+						if (piece->possibleMove(i, j, newRow, newCol, isCaptured, this)) 
+						{
+							Plateau copie = *this; 
+							copie.deplacer(i, j, newRow, newCol);
+
+							if (!copie.inCheck(isWhite)) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 void Plateau::setEchiquier(Echiquier* echiquier)
 {
 	_echiquier = echiquier;
+}
+
+Piece* Plateau::promote(Piece* pawn) {
+	bool isWhite = pawn->isWhite();
+	delete pawn;
+	QString imagePath = isWhite ? ":/chessGame/white_queen.png" : ":/chessGame/black_queen.png";
+	return new Queen(isWhite, imagePath);
+}
+
+void Plateau::clear()
+{
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) 
+		{
+			_grid[i][j] = nullptr;
+		}
+	}
 }

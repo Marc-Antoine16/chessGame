@@ -6,29 +6,46 @@
 
 using namespace std;
 
-bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const
+Rook::Rook(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
 {
-    if (currentRow != newRow && currentColumn != newColumn)
-        return false;
+    _deplacement = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+}
 
-    int rowStep = (newRow == currentRow) ? 0 : (newRow > currentRow ? 1 : -1);
-    int colStep = (newColumn == currentColumn) ? 0 : (newColumn > currentColumn ? 1 : -1);
+Rook::Rook(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath)
+{
+    _deplacement = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+}
 
-    for (int row = currentRow + rowStep, col = currentColumn + colStep; row != newRow || col != newColumn; row += rowStep, col += colStep)
-    {
-        if (plateau->getPiece(row, col) != nullptr)
+bool Rook::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool& isCaptured, Plateau* plateau) const {
+    int dRow = newRow - currentRow;
+    int dCol = newColumn - currentColumn;
+
+    if (dRow != 0 && dCol != 0) return false;
+
+    int stepRow = (dRow == 0) ? 0 : (dRow > 0 ? 1 : -1);
+    int stepCol = (dCol == 0) ? 0 : (dCol > 0 ? 1 : -1);
+
+    int r = currentRow + stepRow;
+    int c = currentColumn + stepCol;
+
+    while (r != newRow || c != newColumn) {
+        if (plateau->getPiece(r, c) != nullptr) {
             return false;
+        }
+        r += stepRow;
+        c += stepCol;
     }
 
-    Piece* dest = plateau->getPiece(newRow, newColumn);
-    if (dest == nullptr || dest->isWhite() != this->_isWhite)
-    {
-        if (dest != nullptr && dest->isWhite() != this->_isWhite)
-        {
-            isCaptured = true;
-        }
+    Piece* target = plateau->getPiece(newRow, newColumn);
+    if (target == nullptr) {
+        isCaptured = false;
         return true;
     }
+    else if (target->isWhite() != this->isWhite()) {
+        isCaptured = true;
+        return true;
+    }
+
     return false;
 }
 

@@ -5,6 +5,7 @@
 
 class Piece;
 class Echiquier;
+class Queen;
 
 class Plateau
 {
@@ -22,5 +23,8 @@ public:
 	bool isOccupied(int row, int column) const;
 	std::queue<std::vector<std::string>> getMoveDone() const;
 	bool inCheck(bool isWhite);
+	bool checkMate(bool isWhite);
 	void setEchiquier(Echiquier* echiquier);
+	Piece* promote(Piece* pawn);
+	void clear();
 };

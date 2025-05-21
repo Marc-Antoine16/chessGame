@@ -13,11 +13,15 @@
 #include <vector>
 #include <fstream>
 #include <QTimer>
+#include <sstream>
+#include <QObject>
+#include <windows.h>
 
 class Echiquier;
 class Plateau;
 
-class GameManager : public QObject {
+class GameManager : public QObject 
+{
 	Q_OBJECT
 private:
 	Plateau _plateau;
@@ -38,4 +42,8 @@ public:
 	void endGame();
 	void onTimeoutBlanc();
 	void onTimeoutNoir();
+	void startNewGame();
+	void loadGame();
+	void rejouerCoupsAvecPause(std::vector<std::vector<std::string>> coups, int index);
+	void setupPieces();
 };

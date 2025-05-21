@@ -1,55 +1,59 @@
 #include "Pawn.h"
 #include "Plateau.h"
 
-Pawn::Pawn(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
+bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool& isCaptured, Plateau* plateau) const
 {
-	if (isWhite)
-		_deplacement.push_back(_currentRow - 1);
-	else
-		_deplacement.push_back(_currentRow + 1);
+    int deltaRow = newRow - currentRow;
+    int deltaCol = newColumn - currentColumn;
 
-}
+    Piece* dest = plateau->getPiece(newRow, newColumn);
 
-Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath)
-{
-	if (isWhite)
-	{
-		_deplacement.push_back(currentRow - 1);
-		_deplacement.push_back(currentRow - 2);
-	}
-	else
-	{
-		_deplacement.push_back(currentRow + 1);
-		_deplacement.push_back(currentRow + 2);
-	}
-}
-
-bool Pawn::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const
-{
-    int direction = _isWhite ? -1 : 1;
-    Piece* cible = plateau->getPiece(newRow, newColumn);
-
-    if (!_isCaptured && newColumn == currentColumn && newRow == currentRow + direction)
+ 
+    if ((deltaCol == 0) && dest == nullptr)
     {
-        return cible == nullptr; 
-    }
-    else if (!_isCaptured && newColumn == currentColumn && currentRow == (_isWhite ? 6 : 1) && newRow == currentRow + (2 * direction))
-    {
-        return cible == nullptr && plateau->getPiece(currentRow + direction, currentColumn) == nullptr;
-    }
-    else if (newColumn == currentColumn + 1 || newColumn == currentColumn - 1)
-    {
-        if (newRow == currentRow + direction)
+       
+        if (deltaRow == (_isWhite ? -1 : 1))
+            return true;
+
+        if (deltaRow == (_isWhite ? -2 : 2) && currentRow == (_isWhite ? 6 : 1))
         {
-            if (cible != nullptr && cible->isWhite() != _isWhite)
-            {
-                isCaptured = true;
+            int stepRow = _isWhite ? -1 : 1;
+            if (plateau->getPiece(currentRow + stepRow, currentColumn) == nullptr)
                 return true;
-            }
+        }
+
+        return false;
+    }
+    if (abs(deltaCol) == 1 && deltaRow == (_isWhite ? -1 : 1))
+    {
+        if (dest != nullptr && dest->isWhite() != this->_isWhite)
+        {
+            isCaptured = true;
+            return true;
         }
     }
 
     return false;
+}
+
+Pawn::Pawn(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
+{
+    _deplacement = { { 2, 1 }, { 1, 2 }, { -1, 2 }, { -2, 1 },
+    { -2, -1 }, { -1, -2 }, { 1, -2 }, { 2, -1 } };
+}
+
+Pawn::Pawn(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath)
+{
+    {
+        if (_isWhite)
+        {
+            _deplacement = { { -1, 0 }, { -1, -1 }, { -1, 1 } };
+        }
+        else
+        {
+            _deplacement = { { -1, 0 }, { -1, -1 }, { -1, 1 } };
+        }
+    }
 }
 
 std::string Pawn::getType() const

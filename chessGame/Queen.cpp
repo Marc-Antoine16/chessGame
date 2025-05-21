@@ -3,52 +3,61 @@
 #include "Piece.h"
 #include <vector>
 
-bool Queen::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool &isCaptured, Plateau* plateau) const {
-	if (abs(newRow - currentRow) == abs(newColumn - currentColumn))
-	{
-		
-		int rowStep = (newRow > currentRow) ? 1 : -1;
-		int colStep = (newColumn > currentColumn) ? 1 : -1;
-		for (int row = currentRow + rowStep, col = currentColumn + colStep; row != newRow && col != newColumn; row += rowStep, col += colStep)
-		{
-			if (plateau->getPiece(row, col) != nullptr)
-			{
-				return false; 
-			}
-		}
-		Piece* dest = plateau->getPiece(newRow, newColumn);
-		if (dest == nullptr) {
-			return true; 
-		}
-		else if (dest->isWhite() != this->_isWhite) {
-			isCaptured = true;  
-			return true;
-		}
-		return false;
-	} else if (currentRow != newRow && currentColumn != newColumn)
-		return false;
+bool Queen::possibleMove(int currentRow, int currentColumn, int newRow, int newColumn, bool& isCaptured, Plateau* plateau) const
+{
+    int dRow = newRow - currentRow;
+    int dCol = newColumn - currentColumn;
 
-	int rowStep = (newRow == currentRow) ? 0 : (newRow > currentRow ? 1 : -1);
-	int colStep = (newColumn == currentColumn) ? 0 : (newColumn > currentColumn ? 1 : -1);
+    if (dRow != 0 && dCol != 0 && abs(dRow) != abs(dCol))
+        return false;
 
-	for (int row = currentRow + rowStep, col = currentColumn + colStep; row != newRow || col != newColumn; row += rowStep, col += colStep)
-	{
-		if (plateau->getPiece(row, col) != nullptr)
-			return false;
-	}
+    int stepRow = (dRow == 0) ? 0 : (dRow > 0 ? 1 : -1);
+    int stepCol = (dCol == 0) ? 0 : (dCol > 0 ? 1 : -1);
 
-	Piece* dest = plateau->getPiece(newRow, newColumn);
-	if (dest == nullptr) {
-		return true;
-	}
-	else if (dest->isWhite() != this->_isWhite) {
-		isCaptured = true;
-		return true;
-	}
-	return false;
+    int r = currentRow + stepRow;
+    int c = currentColumn + stepCol;
+
+    while (r != newRow || c != newColumn)
+    {
+        if (plateau->isOccupied(r, c))
+            return false; 
+
+        r += stepRow;
+        c += stepCol;
+    }
+
+    Piece* destPiece = plateau->getPiece(newRow, newColumn);
+
+    if (destPiece == nullptr)
+    {
+        isCaptured = false;
+        return true;
+    }
+    else if (destPiece->isWhite() != this->isWhite())
+    {
+        isCaptured = true;
+        return true;
+    }
+    return false;
+}
+Queen::Queen(bool isWhite, QString& imagePath) : Piece(isWhite, imagePath)
+{
+	_deplacement = { { 1, 0 }, { -1, 0 },
+	{ 0, 1 }, { 0, -1 },
+	{ 1, 1 }, { -1, -1 },
+	{ 1, -1 }, { -1, 1 } };
 }
 
-std::string Queen::getType() const 
+Queen::Queen(int currentRow, int currentColumn, bool isWhite, QString& imagePath) : Piece(currentRow, currentColumn, isWhite, imagePath)
+{
+	_deplacement = { { 1, 0 }, { -1, 0 },
+	{ 0, 1 }, { 0, -1 },
+	{ 1, 1 }, { -1, -1 },
+	{ 1, -1 }, { -1, 1 } };
+}
+
+
+std::string Queen::getType() const
 {
 	return "queen";
 }
