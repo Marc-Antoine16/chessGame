@@ -160,20 +160,8 @@ std::queue<std::vector<std::string>> Plateau::getMoveDone() const
 
 bool Plateau::inCheck(bool isWhite)
 {
-	int kingRow = -1, kingColumn = -1;
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			Piece* piece = _grid[i][j];
-			if (piece != nullptr && piece->getType() == "king" && piece->isWhite() == isWhite)
-			{
-				kingRow = i;
-				kingColumn = j;
-				break;
-			}
-		}
-	}
+	int kingRow = findKing()[0], kingColumn = findKing()[1];
+	
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -192,23 +180,26 @@ bool Plateau::inCheck(bool isWhite)
 	return false;
 }
 
-bool Plateau::checkMate(bool isWhite) 
+bool Plateau::checkMate(bool isWhite)
 {
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
-			Piece* piece = getPiece(i, j);
-			if (piece != nullptr && piece->isWhite() == isWhite) {
-
-				for (int newRow = 0; newRow < 8; newRow++) {
-					for (int newCol = 0; newCol < 8; newCol++) {
-						bool isCaptured = false;
-
-						if (piece->possibleMove(i, j, newRow, newCol, isCaptured, this)) 
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			Piece* piece = _grid[i][j];
+			if (piece != nullptr && piece->isWhite() == isWhite)
+			{
+				for (int x = 0; x < 8; ++x)
+				{
+					for (int y = 0; y < 8; ++y)
+					{
+						bool isCaptured = (_grid[x][y] != nullptr && _grid[x][y]->isWhite() != isWhite);
+						if (piece->possibleMove(i, j, x, y, isCaptured, this))
 						{
-							Plateau copie = *this; 
-							copie.deplacer(i, j, newRow, newCol);
-
-							if (!copie.inCheck(isWhite)) {
+							Plateau copy = *this;
+							copy.deplacer(i, j, x, y);
+							if (!copy.inCheck(isWhite))
+							{
 								return false;
 							}
 						}
@@ -242,3 +233,23 @@ void Plateau::clear()
 		}
 	}
 }
+
+std::vector<int> Plateau::findKing()
+{
+	std::vector<int> kingPosition;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			Piece* piece = _grid[i][j];
+			if (piece != nullptr && piece->getType() == "king")
+			{
+				kingPosition.push_back(i);
+				kingPosition.push_back(j);
+				return kingPosition;
+			}
+		}
+	}
+	return kingPosition;
+}
+

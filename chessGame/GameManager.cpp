@@ -123,7 +123,6 @@ GameManager::~GameManager() {
 void GameManager::onButtonClicked(int row, int column)
 {
 	static int sourceRow = -1, sourceColumn = -1;
-	Plateau* plateau = &_plateau;
 
 	if (sourceRow == -1 && sourceColumn == -1)
 	{
@@ -141,29 +140,39 @@ void GameManager::onButtonClicked(int row, int column)
 		if (_plateau.moveValid(sourceRow, sourceColumn, row, column))
 		{
 			Plateau copiePlateau = _plateau;
-
 			copiePlateau.deplacer(sourceRow, sourceColumn, row, column);
 
 			if (!copiePlateau.inCheck(_tourBlanc))
 			{
 				_plateau.deplacer(sourceRow, sourceColumn, row, column);
+
 				_tourBlanc ? _timerB->stop() : _timerN->stop();
 				_tourBlanc ? _timerN->start() : _timerB->start();
 				_tourBlanc = !_tourBlanc;
-				_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+
 				_echiquier->updateBoard(sourceRow, sourceColumn);
 				_echiquier->updateBoard(row, column);
+				_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+
+				if (_plateau.inCheck(_tourBlanc))
+				{
+					if (_plateau.checkMate(_tourBlanc))
+					{
+						_echiquier->setTourLabel(_tourBlanc ? "checkmate! noir gagne" : "Checkmate! blanc gagne");
+						_timerB->stop();
+						_timerN->stop();
+						endGame();
+						return;
+					}
+					else
+					{
+						_echiquier->setTourLabel(_tourBlanc ? "Echec blanc !" : "Echec noir !");
+					}
+				}
 			}
 			else
 			{
-				if (_plateau.checkMate(_tourBlanc))
-				{
-					_echiquier->setTourLabel(_tourBlanc ? "Echec et mat ! Les noirs gagnent !" : "Echec et mat ! Les blancs gagnent !");
-					_timerB->stop();
-					_timerN->stop();
-					endGame();
-					return;
-				}
+				_echiquier->setTourLabel("Coup invalide");
 			}
 		}
 		sourceRow = -1;
@@ -200,6 +209,8 @@ void GameManager::putInCsv(std::queue<std::vector<std::string>> moveDone)
 void GameManager::endGame()
 {
 	putInCsv(_plateau.getMoveDone());
+	_timerB->stop();
+	_timerN->stop();
 }
 
 void GameManager::startNewGame() 
@@ -247,19 +258,33 @@ void GameManager::loadGame()
 	std::string ligne;
 	std::getline(file, ligne);
 	while (std::getline(file, ligne)) {
-		std::stringstream ss(ligne);
+		std::stringstream os(ligne);
 		std::string type, couleur, row1, col1, row2, col2;
-		std::getline(ss, type, ',');
-		std::getline(ss, couleur, ',');
-		std::getline(ss, row1, ',');
-		std::getline(ss, col1, ',');
-		std::getline(ss, row2, ',');
-		std::getline(ss, col2, ',');
+		std::getline(os, type, ',');
+		std::getline(os, couleur, ',');
+		std::getline(os, row1, ',');
+		std::getline(os, col1, ',');
+		std::getline(os, row2, ',');
+		std::getline(os, col2, ',');
 
 		tousLesCoups.push_back({ type, couleur, row1, col1, row2, col2 });
 	}
 
 	rejouerCoupsAvecPause(tousLesCoups, 0);
+
+	if (_plateau.inCheck(_tourBlanc)) {
+		_echiquier->setTourLabel(_tourBlanc ? "Échec pour les blancs !" : "Échec pour les noirs !");
+
+		if (_plateau.checkMate(_tourBlanc)) {
+			_echiquier->setTourLabel(_tourBlanc ? "Échec et mat ! Noir gagne." : "Échec et mat ! Blanc gagne.");
+			_timerB->stop();
+			_timerN->stop();
+			endGame();
+		}
+	}
+	else {
+		_echiquier->setTourLabel(_tourBlanc ? "Tour des blancs" : "Tour des noirs");
+	}
 	file.close();
 }
 

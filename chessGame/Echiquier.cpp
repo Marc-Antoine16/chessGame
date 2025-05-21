@@ -101,6 +101,7 @@ Echiquier::~Echiquier()
 void Echiquier::setTourLabel(const QString& text)
 {
 	_tourLabel->setText(text);
+	_tourLabel->setMaximumSize(325, 50);
 	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px");
 	_tourLabel->repaint();
 }

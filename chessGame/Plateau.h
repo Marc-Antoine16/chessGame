@@ -27,4 +27,5 @@ public:
 	void setEchiquier(Echiquier* echiquier);
 	Piece* promote(Piece* pawn);
 	void clear();
+	std::vector<int> findKing();
 };
