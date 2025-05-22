@@ -218,6 +218,8 @@ void GameManager::startNewGame()
 	_timerB->stop();
 	_timerN->stop();
 
+	_piecesCapturees.clear();
+
 	setupPieces();
 
 	_echiquier->higlightSquare(4, 4);

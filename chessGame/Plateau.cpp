@@ -252,4 +252,3 @@ std::vector<int> Plateau::findKing()
 	}
 	return kingPosition;
 }
-

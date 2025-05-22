@@ -1,6 +1,1 @@
 Type , isWhite , CurrentRow , CurrentColumn , NewRow , NewColumn
-pawn , blanc , 7 , 5 , 5 , 5
-pawn , noir , 2 , 6 , 4 , 6
-pawn , blanc , 5 , 5 , 4 , 6
-pawn , noir , 2 , 7 , 4 , 7
-queen , blanc , 8 , 4 , 4 , 8
