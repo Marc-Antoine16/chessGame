@@ -48,7 +48,9 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : QMainWindow()
 	QHBoxLayout* topLayout = new QHBoxLayout();
 	topLayout->setSpacing(100);
 
-	_timerBlancLabel = new QLabel("05:00", this);
+	QString timer = "05:00";
+
+	_timerBlancLabel = new QLabel(timer, this);
 	_timerBlancLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_timerBlancLabel);
 
@@ -56,7 +58,7 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : QMainWindow()
 	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_tourLabel);
 
-	_timerNoirLabel = new QLabel("05:00", this);
+	_timerNoirLabel = new QLabel(timer, this);
 	_timerNoirLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_timerNoirLabel);
 

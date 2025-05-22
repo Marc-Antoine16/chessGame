@@ -77,15 +77,26 @@ GameManager::GameManager(int temps)
 void GameManager::onTimeoutBlanc() {
 	_tempsB--;  
 	_echiquier->updateTimerLabel(_tempsB, true);
+
+	if (_tempsB <= 0 || _tempsN <= 0) {
+		_echiquier->setTourLabel((_tempsB > _tempsN) ? "Hors temps! blanc gagne" : "Hors temps! noir gagne");
+		this->endGame();
+	}
 }
 
 void GameManager::onTimeoutNoir() {
 	_tempsN--;  
 	_echiquier->updateTimerLabel(_tempsN, false);
+
+	if (_tempsB <= 0 || _tempsN <= 0) {
+		_echiquier->setTourLabel((_tempsB > _tempsN) ? "Hors temps! blanc gagne" : "Hors temps! noir gagne");
+		this->endGame();
+	}
 }
 
 
-void GameManager::startGame() {
+void GameManager::startGame() 
+{
 	connect(_echiquier, &Echiquier::fenetreFermee, this, &GameManager::endGame);
 	_echiquier = new Echiquier(_plateau, this);
 	_plateau.setEchiquier(_echiquier);
@@ -215,6 +226,7 @@ void GameManager::endGame()
 
 void GameManager::startNewGame() 
 {
+	this->putInCsv(_plateau.getMoveDone());
 	_timerB->stop();
 	_timerN->stop();
 
