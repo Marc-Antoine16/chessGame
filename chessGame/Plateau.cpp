@@ -11,15 +11,6 @@ Plateau::Plateau()
 			_grid[i][j] = nullptr;
 		}
 	}
-	std::vector<std::string> info;
-	info.push_back("Type");
-	info.push_back("isWhite");
-	info.push_back("CurrentRow");
-	info.push_back("CurrentColumn");
-	info.push_back("NewRow");
-	info.push_back("NewColumn");
-
-	_moveDone.push(info);
 }
 
 Plateau::Plateau(const Plateau& plateau)
@@ -160,7 +151,7 @@ std::queue<std::vector<std::string>> Plateau::getMoveDone() const
 
 bool Plateau::inCheck(bool isWhite)
 {
-	int kingRow = findKing()[0], kingColumn = findKing()[1];
+	int kingRow = findKing(isWhite)[0], kingColumn = findKing(isWhite)[1];
 	
 	for (int i = 0; i < 8; i++)
 	{
@@ -234,7 +225,7 @@ void Plateau::clear()
 	}
 }
 
-std::vector<int> Plateau::findKing()
+std::vector<int> Plateau::findKing(bool isWhite)
 {
 	std::vector<int> kingPosition;
 	for (int i = 0; i < 8; i++)
@@ -242,7 +233,7 @@ std::vector<int> Plateau::findKing()
 		for (int j = 0; j < 8; j++)
 		{
 			Piece* piece = _grid[i][j];
-			if (piece != nullptr && piece->getType() == "king")
+			if (piece != nullptr && piece->getType() == "king" && piece->isWhite() == isWhite)
 			{
 				kingPosition.push_back(i);
 				kingPosition.push_back(j);
@@ -253,3 +244,10 @@ std::vector<int> Plateau::findKing()
 	return kingPosition;
 }
 
+void Plateau::clearMoveDone()
+{
+	while (!_moveDone.empty())
+	{
+		_moveDone.pop();
+	}
+}

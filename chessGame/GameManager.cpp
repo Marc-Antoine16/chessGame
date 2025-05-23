@@ -75,11 +75,25 @@ GameManager::GameManager(int temps)
 }
 
 void GameManager::onTimeoutBlanc() {
+	if (_tempsB <= 0) {
+		_echiquier->setTourLabel("Temps ecoule! Noir gagne");
+		_timerB->stop();
+		_timerN->stop();
+		endGame();
+		return;
+	}
 	_tempsB--;  
 	_echiquier->updateTimerLabel(_tempsB, true);
 }
 
 void GameManager::onTimeoutNoir() {
+	if (_tempsN <= 0) {
+		_echiquier->setTourLabel("Temps ecoule! Blanc gagne");
+		_timerB->stop();
+		_timerN->stop();
+		endGame();
+		return;
+	}
 	_tempsN--;  
 	_echiquier->updateTimerLabel(_tempsN, false);
 }
@@ -158,7 +172,7 @@ void GameManager::onButtonClicked(int row, int column)
 				{
 					if (_plateau.checkMate(_tourBlanc))
 					{
-						_echiquier->setTourLabel(_tourBlanc ? "checkmate! noir gagne" : "Checkmate! blanc gagne");
+						_echiquier->setTourLabel(_tourBlanc ? "checkmate! Noir gagne" : "Checkmate! Blanc gagne");
 						_timerB->stop();
 						_timerN->stop();
 						endGame();
@@ -187,6 +201,7 @@ void GameManager::putInCsv(std::queue<std::vector<std::string>> moveDone)
 
 	if (fichierE)
 	{
+		fichierE << "Type, Couleur, currentRow, currentColumn, newRow, newColumn" << std::endl;
 		while (!moveDone.empty())
 		{
 			std::vector<std::string> move = moveDone.front();
@@ -215,8 +230,7 @@ void GameManager::endGame()
 
 void GameManager::startNewGame() 
 {
-	_timerB->stop();
-	_timerN->stop();
+	endGame();
 
 	setupPieces();
 
@@ -269,6 +283,8 @@ void GameManager::loadGame()
 
 		tousLesCoups.push_back({ type, couleur, row1, col1, row2, col2 });
 	}
+
+	_plateau.clearMoveDone();
 
 	rejouerCoupsAvecPause(tousLesCoups, 0);
 

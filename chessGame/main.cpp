@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-	GameManager gameManager(300);
+	GameManager gameManager(10);
     gameManager.startGame();
     
     return app.exec();

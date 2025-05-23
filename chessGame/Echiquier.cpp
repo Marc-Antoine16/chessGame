@@ -53,7 +53,7 @@ Echiquier::Echiquier(Plateau& plateau, GameManager* gameManager) : QMainWindow()
 	topLayout->addWidget(_timerBlancLabel);
 
 	_tourLabel = new QLabel("Tour des blancs", this);
-	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 27px; font-weight: bold; font-style: oblique; color: black; padding : 5px;");
 	topLayout->addWidget(_tourLabel);
 
 	_timerNoirLabel = new QLabel("05:00", this);
@@ -101,8 +101,8 @@ Echiquier::~Echiquier()
 void Echiquier::setTourLabel(const QString& text)
 {
 	_tourLabel->setText(text);
-	_tourLabel->setMaximumSize(325, 50);
-	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 30px; font-weight: bold; font-style: oblique; color: black; padding : 5px");
+	_tourLabel->setMaximumSize(350, 50);
+	_tourLabel->setStyleSheet("font-family: 'Times New Roman'; font-size: 27px; font-weight: bold; font-style: oblique; color: black; padding : 5px");
 	_tourLabel->repaint();
 }
 
