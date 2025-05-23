@@ -160,7 +160,7 @@ std::queue<std::vector<std::string>> Plateau::getMoveDone() const
 
 bool Plateau::inCheck(bool isWhite)
 {
-	int kingRow = findKing()[0], kingColumn = findKing()[1];
+	int kingRow = findKing(isWhite)[0], kingColumn = findKing(isWhite)[1];
 	
 	for (int i = 0; i < 8; i++)
 	{
@@ -234,7 +234,7 @@ void Plateau::clear()
 	}
 }
 
-std::vector<int> Plateau::findKing()
+std::vector<int> Plateau::findKing(bool isWhite)
 {
 	std::vector<int> kingPosition;
 	for (int i = 0; i < 8; i++)
@@ -242,7 +242,7 @@ std::vector<int> Plateau::findKing()
 		for (int j = 0; j < 8; j++)
 		{
 			Piece* piece = _grid[i][j];
-			if (piece != nullptr && piece->getType() == "king")
+			if (piece != nullptr && piece->getType() == "king" && piece->isWhite() == isWhite)
 			{
 				kingPosition.push_back(i);
 				kingPosition.push_back(j);
